@@ -71,7 +71,7 @@ setInterval(async function () {
         let price = dexGuruData['priceUSD'];
         price *= Math.pow(10, 10);
         let channel = client.channels.cache.get('824212242480103445'); //Change this to your Channel Id
-        channel.send(price.toPrecision(6));
+        await channel.send(price.toPrecision(6));
     } catch (err) {
         console.log(err);
         return "Failed";
@@ -101,7 +101,7 @@ setInterval(async function () {
         let change24h = cmcQuote['percent_change_24h'].toFixed(4);
         let change7d = cmcQuote['percent_change_7d'].toFixed(4);
 
-        channel.send({
+        await channel.send({
             embed: {
                 "title": "**" + contractAddress + "**",
                 "description": "This bot will automatically post new stats every 5 minutes.",
