@@ -75,9 +75,9 @@ setInterval(async function () {
         price = price.toPrecision(6);
         if (price > 0) {
             if (price > previousValue) {
-                channel.send("<:GreenSafu:828471113754869770> " + price);
+                await channel.send("<:GreenSafu:828471113754869770> " + price);
             } else {
-                channel.send("<:RedSafu:828471096734908467> " + price);
+                await channel.send("<:RedSafu:828471096734908467> " + price);
             }
             previousValue = price;
         }
@@ -110,7 +110,7 @@ setInterval(async function () {
         let change24h = cmcQuote['percent_change_24h'].toFixed(4);
         let change7d = cmcQuote['percent_change_7d'].toFixed(4);
 
-        channel.send({
+        await channel.send({
             embed: {
                 "title": "**" + contractAddress + "**",
                 "description": "This bot will automatically post new stats every 5 minutes.",
