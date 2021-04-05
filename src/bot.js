@@ -75,9 +75,9 @@ setInterval(async function () {
         price = price.toPrecision(6);
         if (price > 0) {
             if (price > previousValue) {
-                channel.send(price + " <:GreenSafu:828471113754869770>");
+                channel.send("<:GreenSafu:828471113754869770> " + price);
             } else {
-                channel.send(price + " <:RedSafu:828471096734908467>");
+                channel.send("<:RedSafu:828471096734908467> " + price);
             }
             previousValue = price;
         }
