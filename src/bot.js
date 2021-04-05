@@ -1,5 +1,5 @@
 //Dependencies.
-const { Client } = require('discord.js');
+const { Client, Message } = require('discord.js');
 const dotenv = require('dotenv');
 const axios = require('axios').default;
 const contractAddress = "0x8076c74c5e3f5852037f31ff0093eeb8c8add8d3"; //SAFEMOON Contract Address
@@ -65,13 +65,22 @@ async function getCMCData() {
 /**
  * Function for sending the stand-alone price every 20 seconds.
  */
+let previousValue, price;
 setInterval(async function () {
     try {
         let dexGuruData = await getApi();
-        let price = dexGuruData['priceUSD'];
-        price *= Math.pow(10, 10);
         let channel = client.channels.cache.get('824212242480103445'); //Change this to your Channel Id
-        await channel.send(price.toPrecision(6));
+        price = dexGuruData['priceUSD'];
+        price *= Math.pow(10, 10);
+        price = price.toPrecision(6);
+        if (price > 0) {
+            if (price > previousValue) {
+                await channel.send("<:GreenSafu:828471113754869770> " + price);
+            } else {
+                await channel.send("<:RedSafu:828471096734908467> " + price);
+            }
+            previousValue = price;
+        }
     } catch (err) {
         console.log(err);
         return "Failed";
