@@ -40,7 +40,6 @@ async function getBurnedTotal() {
         let response = await axios.get('https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=0x8076C74C5e3F5852037F31Ff0093Eeb8c8ADd8D3&address=0x0000000000000000000000000000000000000001&tag=latest&apikey=YOUR_API_KEY_GOES_HERE');
         let value = response.data['result'];
         value = (value / 1_000_000_000_000_000_000_000).toFixed(4);
-        console.log(value);
         return value;
     } catch (err) {
         console.log(err);
@@ -63,29 +62,53 @@ async function getCMCData() {
 }
 
 /**
- * Function for sending the stand-alone price every 20 seconds.
+ * Method for getting the current price.
+ * @returns price
  */
-let previousValue, price;
-setInterval(async function () {
+async function getPrice() {
     try {
         let dexGuruData = await getApi();
-        let channel = client.channels.cache.get('824212242480103445'); //Change this to your Channel Id
         price = dexGuruData['priceUSD'];
         price *= Math.pow(10, 10);
-        price = price.toPrecision(6);
+        return price.toPrecision(6);
+    } catch (err) {
+        console.log(err);
+        return "Failed";
+    }
+}
+
+/**
+ * Function for sending the stand-alone price to a specific channel.
+ */
+let previousPrice, price;
+async function postPrice(channelId) {
+    try {
+        let price = await getPrice();
+        let channel = client.channels.cache.get(channelId);
         if (price > 0) {
-            if (price > previousValue) {
-                await channel.send("<:GreenSafu:828471113754869770> " + price);
-            } else {
-                await channel.send("<:RedSafu:828471096734908467> " + price);
-            }
-            previousValue = price;
+            let emoji = price > previousPrice ? "<:GreenSafu:828471113754869770>" : "<:RedSafu:828471096734908467>";
+            await channel.send(emoji + " " + price);
+            previousPrice = price;
         }
     } catch (err) {
         console.log(err);
         return "Failed";
     }
-}, 20 * 1000);
+}
+
+/**
+ * Sends the stand-alone price every 20 seconds to desired channel.
+ */
+setInterval(() => postPrice("824212242480103445"), 20 * 1000); //Change this to your Channel Id
+
+/**
+ * Basic message command.
+ */
+client.on('message', message => {
+    if (message.content == '!price') {
+        postPrice(message.channel.id);
+    }
+});
 
 /**
  * Function for sending the Embedded price display every 5 minutes.
