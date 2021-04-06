@@ -13,9 +13,31 @@ const client = new Client();
 
 //Login
 client.login(process.env.DISCORD_TOKEN);
-client.on('ready', () => {
+client.on('ready', async () => {
     console.log(client.user.tag + ' has logged in.');
+    let price = await getPrice();
+    client.user.setPresence({
+        status: "online",
+        activity: {
+            name: "Price: " + price,
+            type: "WATCHING" // PLAYING, WATCHING, LISTENING, STREAMING,
+        }
+    }).catch(console.error);
 });
+
+/**
+ * Update the discord rich presence price every 20 seconds.
+ */
+setInterval(async () => {
+    let price = await getPrice();
+    client.user.setPresence({
+        status: "online",
+        activity: {
+            name: "Price: " + price,
+            type: "WATCHING" // PLAYING, WATCHING, LISTENING, STREAMING,
+        }
+    }).catch(console.error);
+}, 20 * 1000);
 
 /**
  * Function for obtaining data from Dex.Guru's API.
