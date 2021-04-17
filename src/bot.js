@@ -107,9 +107,7 @@ async function getCMCData() {
 async function getPrice() {
     try {
         let dexGuruData = await getApi()
-        price = dexGuruData['priceUSD']
-        price *= Math.pow(10, 10)
-        return price.toPrecision(6)
+        return price = dexGuruData['priceUSD'].toFixed(dexGuruData['decimals'])
     } catch (err) {
         console.log(err)
         return "Failed"
