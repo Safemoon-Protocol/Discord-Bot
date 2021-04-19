@@ -1,0 +1,35 @@
+version: "3.7"
+
+# Configurable Settings
+x-safemoon-settings:
+  &safemoon-settings
+    volumes:
+      - .:/home/bot
+    networks:
+      - safemoon
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+      MONGO_INITDB_DATABASE_NAME: ${MONGODB_DB_NAME}
+    restart: on-failure
+
+# No need to edit anything below this line
+services:
+  db:
+    image: mongo:4.4.5
+    container_name: safemoon-bot-db
+    << : *safemoon-settings
+
+  bot:
+    image: node:14.16.1
+    container_name: safemoon-bot
+    entrypoint: "npm run docker:start"
+    depends_on:
+      - db
+    working_dir: /home/bot
+    << : *safemoon-settings
+
+networks:
+  safemoon:
+    external: false
+

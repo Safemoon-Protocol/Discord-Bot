@@ -66,6 +66,7 @@ module.exports = (client) => {
         console.log("channel id: " + channelId)
 
         //setInterval(() => bot.postPrice(channelId), 300 * 1000)
+        bot.postEmbeded(channelId)
         setInterval(() => bot.postEmbeded(channelId), 300 * 1000)
     })
 
