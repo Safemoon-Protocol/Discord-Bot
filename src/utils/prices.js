@@ -1,15 +1,11 @@
 const { getPrice, getBurnedTotal, getCMCData } = require('./external')
 const { contractAddress } = require('../config.json')
 
-/**
-* Function for sending the Embedded price display.
-*/
-async function postEmbeded(client, channelId) {
+async function fetchPriceEmbed(client) {
   try {
     let price = await getPrice()
-    //let volume = (dexGuruData['volume24hUSD'] / 1_000_000).toFixed(4)
-    let channel = await client.channels.fetch(channelId)
-    
+    // let volume = (dexGuruData['volume24hUSD'] / 1_000_000).toFixed(4)
+  
     let burnTotal = await getBurnedTotal()
     let timeStamp = Date.now()
     
@@ -23,7 +19,7 @@ async function postEmbeded(client, channelId) {
     let change24h = cmcQuote['percent_change_24h'].toFixed(4)
     let change7d = cmcQuote['percent_change_7d'].toFixed(4)
     
-    await channel.send({
+    return {
       embed: {
         "title": "**" + contractAddress.toLowerCase() + "**",
         "description": "This bot will automatically post new stats every 5 minutes.",
@@ -88,12 +84,12 @@ async function postEmbeded(client, channelId) {
           }
         ]
       }
-    });
+    };
   } catch (err) {
     console.log(err)
   }
 }
 
 module.exports = {
-  postEmbeded
+  fetchPriceEmbed
 }

@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./src/bot.js",
     "docker:start": "npm install && npm run dev",
-    "dev": "nodemon ./src/bot.js"
+    "dev": "nodemon ./src/init.js"
   },
   "author": "Henry Wyatt",
   "license": "ISC",

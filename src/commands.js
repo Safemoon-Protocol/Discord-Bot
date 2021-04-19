@@ -1,11 +1,9 @@
-const { Collection } = require('discord.js');
-const { prefix } = require('./config.json')
-const fs = require('fs');
-const path = require('path');
-const { timeNow } = require('./utils/helper');
+const { Collection } = require('discord.js')
+const fs = require('fs')
+const path = require('path')
 
 const processCommands = (client, dir, stack = "") => {
-  const files = fs.readdirSync(dir);
+  const files = fs.readdirSync(dir)
 
   // Find each file within the given directory
   files.forEach((file) => {
@@ -39,7 +37,7 @@ const processCommands = (client, dir, stack = "") => {
 
     // Add our command to our pool
     client.commands.set(command.meta.name, command)
-    console.log('Loaded the', `"${command.meta.name}"`, 'command')
+    console.log(`[CMD]: Loaded the "${command.meta.name}" command.`)
 
     // Remove from require cache
     delete require.cache[require.resolve(path.join(dir, file))]
