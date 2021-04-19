@@ -8,7 +8,10 @@ const { contractAddress } = require('../config.json')
 async function getDexPrice() {
   try {
     let response = await axios.get('https://api.dex.guru/v1/tokens/' + contractAddress + '-bsc/')
-    return response.data['priceUSD'].toFixed(response.data['decimals'])
+    return {
+      price: response.data['priceUSD'].toFixed(response.data['decimals']),
+      provider: 'dex.guru'
+    }
   } catch (err) {
     return await getPrice() // Fallback to Pancake API
   }
@@ -24,7 +27,7 @@ async function getPancakePrice() {
     return response.data
   } catch (err) {
     console.log(err)
-    return "Failed"
+    return 'Failed'
   }
 }
 
@@ -40,7 +43,7 @@ async function getBurnedTotal() {
     return value
   } catch (err) {
     console.log(err)
-    return "Failed"
+    return 'Failed'
   }
 }
 
@@ -54,7 +57,7 @@ async function getCMCData() {
     return response.data
   } catch (err) {
     console.log(err)
-    return "Failed"
+    return 'Failed'
   }
 }
 
@@ -66,10 +69,16 @@ async function getPrice() {
   try {
     let panData = await getPancakePrice()
     let panBase = panData['data'][contractAddress]
-    return parseFloat(panBase['price']).toFixed(9)
+    return {
+      price: parseFloat(panBase['price']).toFixed(9),
+      provider: 'pancake'
+    }
   } catch (err) {
     console.log(err)
-    return "Failed"
+    return {
+      price: 'Failed',
+      provider: 'pancake'
+    }
   }
 }
 
