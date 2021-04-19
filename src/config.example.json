@@ -2,5 +2,5 @@
     "token": "YOUR_BOT_TOKEN",
     "prefix": "!",
     "mongoPath": "mongodb://db:27017/",
-    "contactAddress": "0x8076c74c5e3f5852037f31ff0093eeb8c8add8d3"
+    "contractAddress": "0x8076c74c5e3f5852037f31ff0093eeb8c8add8d3"
 }
