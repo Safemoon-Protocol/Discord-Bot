@@ -1,16 +1,29 @@
+# SafeMoon - Discord Bot
+
 ## Requirements
 
 - [Node.js](http://nodejs.org/)
 - [Discord](https://discordapp.com/) account
+- [Docker](https://get.docker.com/) _(Optional)_
 
 ## Installation Steps (if applicable)
 
-1. Clone the SafeMoon Discord-Bot repository.
+#### Running the bot on your machine
+
+1. Clone the [SafeMoon Discord-Bot](https://github.com/Safemoon-Protocol/Discord-Bot) repository.
 2. Run `npm install`
-3. Run `npm i -g nodemon` (Optional)
-4. Configure your `config.json` file.
-5. Run `npm run start`
-6. Woo. Your bot is now running.
+3. Configure your `config.json` file.
+4. Run `npm run start`
+5. Woo. Your bot is now running!
+
+#### Running the bot via Docker
+
+1. Clone the [SafeMoon Discord-Bot](https://github.com/Safemoon-Protocol/Discord-Bot) repository.
+2. Copy the `.env.example` file to `.env` and update the values.
+    - Set `DISCORD_RUNNER` to either `local` or `shard`, depending on your criteria.
+3. Copy the `config.example.json` file in the `src/` directory to `config.json` and update it to your liking.
+4. Run `docker-compose up -d` in the root directory.
+5. Woo. Your bot is now running!
 
 ## How to add the bot to your discord server
 
@@ -20,12 +33,12 @@
 
 ## How to configure your config.json file
 
-- Create a file called "config.json" inside your project folder. It will need to following syntax:
+Copy the `config.example.json` file inside of the `src/` directory, and then update it to your liking.
 
-```
+```json
 {
-    "token": "YOUR_BOT_TOKEN",
-    "prefix": "default command prefix",
-    "mongoPath": "mongodb://localhost:27017/discordbot"
+  "token": "YOUR_BOT_TOKEN",
+  "prefix": "default command prefix",
+  "mongoPath": "mongodb://localhost:27017/discordbot"
 }
 ```

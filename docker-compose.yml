@@ -23,7 +23,7 @@ services:
   bot:
     image: node:14.16.1
     container_name: safemoon-bot
-    entrypoint: "npm run docker:start"
+    entrypoint: "npm run docker:${DISCORD_RUNNER}"
     depends_on:
       - db
     working_dir: /home/bot
