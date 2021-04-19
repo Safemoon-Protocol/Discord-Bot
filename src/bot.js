@@ -43,7 +43,7 @@ client.on('ready', async () => {
 });
 
 /**
- * Update the discord rich presence price every 30 seconds.
+ * Update the discord rich presence price every 5 minutes.
  */
 setInterval(async () => {
     let price = await getPrice()
@@ -54,15 +54,15 @@ setInterval(async () => {
             type: "WATCHING" // PLAYING, WATCHING, LISTENING, STREAMING,
         }
     }).catch(console.error)
-}, 30 * 1000)
+}, 300 * 1000)
 
 /**
- * Function for obtaining data from Dex.Guru's API.
- * @returns Dex.Guru's API data
+ * Function for obtaining the price from pancakeswap's API.
+ * @returns Pancakeswap's API data
  */
-async function getApi() {
+async function getPancakePrice() {
     try {
-        let response = await axios.get('https://api.dex.guru/v1/tokens/' + contractAddress + '-bsc/')
+        let response = await axios.get('https://api.pancakeswap.info/api/tokens')
         return response.data
     } catch (err) {
         console.log(err)
@@ -106,8 +106,9 @@ async function getCMCData() {
  */
 async function getPrice() {
     try {
-        let dexGuruData = await getApi()
-        return price = dexGuruData['priceUSD'].toFixed(dexGuruData['decimals'])
+        let panData = await getPancakePrice()
+        let panBase = panData['data']['0x8076C74C5e3F5852037F31Ff0093Eeb8c8ADd8D3']
+        return price = parseFloat(panBase['price']).toFixed(9)
     } catch (err) {
         console.log(err)
         return "Failed"
@@ -140,9 +141,8 @@ module.exports.postPrice = postPrice
  */
 async function postEmbeded(channelId) {
     try {
-        let dexGuruData = await getApi()
-        let price = dexGuruData['priceUSD'].toFixed(dexGuruData['decimals'])
-        let volume = (dexGuruData['volume24hUSD'] / 1_000_000).toFixed(4)
+        let price = await getPrice()
+        //let volume = (dexGuruData['volume24hUSD'] / 1_000_000).toFixed(4)
         let channel = client.channels.cache.get(channelId)
 
         let burnTotal = await getBurnedTotal()
@@ -183,7 +183,7 @@ async function postEmbeded(channelId) {
                     },
                     {
                         "name": "🧊 Volume",
-                        "value": "$" + volume + "M",
+                        "value": "Disabled"/*"$" + volume + "M"*/,
                         "inline": true
                     },
                     {
