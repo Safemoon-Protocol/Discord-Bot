@@ -25,7 +25,7 @@ async function postEmbeded(client, channelId) {
     
     await channel.send({
       embed: {
-        "title": "**" + contractAddress + "**",
+        "title": "**" + contractAddress.toLowerCase() + "**",
         "description": "This bot will automatically post new stats every 5 minutes.",
         "url": "https://bscscan.com/address/" + contractAddress,
         "color": 2029249,

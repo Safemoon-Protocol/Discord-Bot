@@ -1,5 +1,5 @@
 const axios = require('axios').default
-const contractAddress = "0x8076C74C5e3F5852037F31Ff0093Eeb8c8ADd8D3"
+const { contractAddress } = require('../config.json')
 
 /**
  * Function for obtaining the price from pancakeswap's API.
@@ -53,7 +53,7 @@ async function getPrice() {
   try {
     let panData = await getPancakePrice()
     let panBase = panData['data'][contractAddress]
-    return price = parseFloat(panBase['price']).toFixed(9)
+    return parseFloat(panBase['price']).toFixed(9)
   } catch (err) {
     console.log(err)
     return "Failed"
