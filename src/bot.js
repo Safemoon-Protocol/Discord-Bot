@@ -1,8 +1,8 @@
 const { Client } = require('discord.js')
 const { updatePresence } = require('./utils/presence')
-const loadCommands = require('./command')
+const loadCommands = require('./commands')
+const loadJobs = require('./jobs')
 const config = require('./config.json')
-const { timeNow } = require('./utils/helper')
 const { passedCooldown, setCommandCooldown } = require('./utils/cooldown')
 
 // Create our bot client
@@ -17,14 +17,19 @@ client.on('ready', async () => {
   // Update Presence (and start interval)
   await updatePresence(client)
   
-  // Load commands
+  // Load commands & jobs
   await loadCommands(client)
+  await loadJobs(client)
 });
 
 /**
  * Message handling
  */
 client.on('message', async (message) => {
+  // Command handler loaded
+  const { commands } = client
+  if (!commands) return
+
   // Ignore messages from bots
   if (message.author.bot) return
   
@@ -32,7 +37,6 @@ client.on('message', async (message) => {
   if (!message.content.startsWith(config.prefix)) return
 
   // Attempt to handle the command
-  const { commands } = client
   const args = message.content.slice(config.prefix.length).trim().split(/ +/)
   const command = args.shift().toLowerCase()
   const run = commands.find((cmd) => cmd.meta.commands.includes(command))
