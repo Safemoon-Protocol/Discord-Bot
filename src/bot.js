@@ -43,7 +43,7 @@ client.on('ready', async () => {
 });
 
 /**
- * Update the discord rich presence price every 20 seconds.
+ * Update the discord rich presence price every 30 seconds.
  */
 setInterval(async () => {
     let price = await getPrice()
@@ -54,7 +54,7 @@ setInterval(async () => {
             type: "WATCHING" // PLAYING, WATCHING, LISTENING, STREAMING,
         }
     }).catch(console.error)
-}, 20 * 1000)
+}, 30 * 1000)
 
 /**
  * Function for obtaining data from Dex.Guru's API.
