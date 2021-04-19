@@ -1,4 +1,4 @@
-const { postEmbeded } = require('../utils/prices')
+const { fetchPriceEmbed } = require('../utils/prices')
 
 module.exports = ({
   meta: {
@@ -8,6 +8,6 @@ module.exports = ({
     cooldownTime: 60
   },
   run: async (client, cache, message) => {
-    await postEmbeded(client, message.channel.id)
+    await message.channel.send(await fetchPriceEmbed(client))
   }
 })
