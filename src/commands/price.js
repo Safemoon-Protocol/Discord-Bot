@@ -1,4 +1,4 @@
-const { getPrice } = require('../utils/external')
+const { getDexPrice } = require('../utils/external')
 const { timeNow } = require('../utils/helper')
 
 module.exports = ({
@@ -23,18 +23,16 @@ module.exports = ({
       isNaN(cache.currentPrice) ||
       cache.cacheExpiry <= timeNow()
     ) {
+      const getCurrentPrice = await getDexPrice()
       cache.cacheExpiry = timeNow() + cache.cacheTime
-      cache.previousPrice = await getPrice()
-
-      if (isNaN(cache.currentPrice)) {
-        cache.currentPrice = cache.previousPrice
-      }
+      cache.previousPrice = isNaN(cache.currentPrice) ? getCurrentPrice : cache.currentPrice
+      cache.currentPrice = getCurrentPrice
     }
 
     // Return the price
     const { previousPrice, currentPrice } = cache
-    let emoji = currentPrice > previousPrice ? "<:GreenSafu:828471113754869770>" : "<:RedSafu:828471096734908467>"
-    await message.channel.send(emoji + " " + currentPrice)
+    const emoji = currentPrice > previousPrice ? "<:GreenSafu:828471113754869770>" : "<:RedSafu:828471096734908467>"
+    await message.channel.send(`${emoji} ${currentPrice}`)
     cache.previousPrice = currentPrice
   }
 })

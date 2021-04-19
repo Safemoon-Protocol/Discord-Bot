@@ -26,7 +26,7 @@ const processJobs = (client, dir, stack = "") => {
     // Add our job to our pool
     client.jobs.set(job.meta.name, job)
     setInterval(async () => {
-      await job.run(client)
+      await job.run(client, job.cache)
       console.log(`[RUNNER]: [${timeNow()}] "${job.meta.name}" was executed.`)
     }, job.meta.interval)
     console.log(`[JOB]: Running the "${job.meta.name}" job.`)
