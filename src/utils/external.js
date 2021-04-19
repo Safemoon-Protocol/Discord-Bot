@@ -2,6 +2,19 @@ const axios = require('axios').default
 const { contractAddress } = require('../config.json')
 
 /**
+ * Function for obtaining the price from Dex.Guru's API.
+ * @returns Dex.Guru's API data
+ */
+async function getDexPrice() {
+  try {
+    let response = await axios.get('https://api.dex.guru/v1/tokens/' + contractAddress + '-bsc/')
+    return response.data['priceUSD'].toFixed(response.data['decimals'])
+  } catch (err) {
+    return await getPrice() // Fallback to Pancake API
+  }
+}
+
+/**
  * Function for obtaining the price from pancakeswap's API.
  * @returns Pancakeswap's API data
  */
@@ -61,6 +74,7 @@ async function getPrice() {
 }
 
 module.exports = {
+  getDexPrice,
   getPancakePrice,
   getBurnedTotal,
   getCMCData,

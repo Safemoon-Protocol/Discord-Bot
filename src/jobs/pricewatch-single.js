@@ -1,17 +1,42 @@
 const mongo = require('../mongo')
 const setupSchema = require('../schemas/setup-schema')
-const { fetchPriceEmbed } = require('../utils/prices')
+const { getDexPrice } = require('../utils/external')
+const { timeNow } = require('../utils/helper')
 
 module.exports = ({
   meta: {
-    name: 'price-watch-job',
-    interval: 300 * 1000
+    name: 'price-watch-single-job',
+    interval: 10 * 1000
+  },
+  cache: {
+    cacheTime: 15,
+    cacheExpiry: timeNow(),
+    previousPrice: NaN,
+    currentPrice: NaN
   },
   run: async (client, cache) => {
     await mongo().then(async (db) => {
       try {
         const guilds = await setupSchema.find({})
-        const priceEmbed = await fetchPriceEmbed()
+        
+        // To avoid spamming the API, this command has a cache
+        // so that we just print the same result if we've already
+        // recently retrieved the latest price
+        if (
+          isNaN(cache.previousPrice) ||
+          isNaN(cache.currentPrice) ||
+          cache.cacheExpiry <= timeNow()
+        ) {
+          const getCurrentPrice = await getDexPrice()
+          cache.cacheExpiry = timeNow() + cache.cacheTime
+          cache.previousPrice = isNaN(cache.currentPrice) ? getCurrentPrice : cache.currentPrice
+          cache.currentPrice = getCurrentPrice
+        }
+
+        // Generate our message
+        const { previousPrice, currentPrice } = cache
+        const emoji = currentPrice > previousPrice ? "<:GreenSafu:828471113754869770>" : "<:RedSafu:828471096734908467>"
+        const priceMessage = `${emoji} ${currentPrice}`
 
         // Are we sharding?
         if (client.shard) {
@@ -21,14 +46,12 @@ module.exports = ({
             const watchingGuilds = guildIds.filter((dbId) => guildIds.includes(dbId))
             const guildsByCsv = watchingGuilds.join(',')
             const dbGuildsAndChannels = guilds.map((g) => `${g.id}/${g.channelId}`).join(',')
-            const embedJson = JSON.stringify(priceEmbed)
 
             await client.shard.broadcastEval(`
               (async () => {
                 // Ignore shards that the Guild IDs do not relate to
                 if (!this.shard.ids.includes(${shardId})) return;
 
-                const embed = JSON.parse(\`${embedJson}\`)
                 const guildIds = "${guildsByCsv}"
                 const watchingGuilds = guildIds.split(',')
                 const dbGuilds = "${dbGuildsAndChannels}"
@@ -50,7 +73,7 @@ module.exports = ({
                   const channel = await guild.channels.cache.get(guildRow.channelId)
                   if (!channel) return
 
-                  await channel.send(embed)
+                  await channel.send(\`${priceMessage}\`)
                 })
               })()
             `)
@@ -70,7 +93,7 @@ module.exports = ({
             const channel = await guild.channels.cache.get(guildRow.channelId)
             if (!channel) return
 
-            await channel.send(priceEmbed)
+            await channel.send(priceMessage)
           })
         }
       }

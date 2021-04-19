@@ -5,7 +5,7 @@ module.exports = ({
     name: 'update-presence',
     interval: 30 * 1000
   },
-  run: async (client) => {
+  run: async (client, cache) => {
     await updatePresence(client)
   }
 })
