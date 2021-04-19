@@ -1,3 +1,5 @@
+const { updatePresence } = require("../utils/presence")
+
 module.exports = ({
   meta: {
     name: 'update-presence',
