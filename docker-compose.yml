@@ -3,8 +3,6 @@ version: "3.7"
 # Configurable Settings
 x-safemoon-settings:
   &safemoon-settings
-    volumes:
-      - .:/home/bot
     networks:
       - safemoon
     environment:
@@ -18,6 +16,9 @@ services:
   db:
     image: mongo:4.4.5
     container_name: safemoon-bot-db
+    volumes:
+        - safemoon-db:/data/db
+        - safemoon-db-config:/data/configdb
     << : *safemoon-settings
 
   bot:
@@ -26,6 +27,8 @@ services:
     entrypoint: "npm run docker:${DISCORD_RUNNER}"
     depends_on:
       - db
+    volumes:
+      - .:/home/bot
     working_dir: /home/bot
     << : *safemoon-settings
 
@@ -33,3 +36,6 @@ networks:
   safemoon:
     external: false
 
+volumes:
+    safemoon-db:
+    safemoon-db-config:

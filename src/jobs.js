@@ -1,6 +1,7 @@
 const { Collection } = require('discord.js')
 const fs = require('fs')
 const path = require('path')
+const { timeNow } = require('./utils/helper')
 
 const processJobs = (client, dir, stack = "") => {
   const files = fs.readdirSync(dir)
@@ -24,7 +25,10 @@ const processJobs = (client, dir, stack = "") => {
 
     // Add our job to our pool
     client.jobs.set(job.meta.name, job)
-    setInterval(async () => await job.run(client), job.meta.interval)
+    setInterval(async () => {
+      await job.run(client)
+      console.log(`[RUNNER]: [${timeNow()}] "${job.meta.name}" was executed.`)
+    }, job.meta.interval)
     console.log(`[JOB]: Running the "${job.meta.name}" job.`)
 
     // Remove from require cache
