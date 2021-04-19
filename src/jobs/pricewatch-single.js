@@ -12,7 +12,8 @@ module.exports = ({
     cacheTime: 15,
     cacheExpiry: timeNow(),
     previousPrice: NaN,
-    currentPrice: NaN
+    currentPrice: NaN,
+    provider: 'unknown'
   },
   run: async (client, cache) => {
     await mongo().then(async (db) => {
@@ -27,16 +28,17 @@ module.exports = ({
           isNaN(cache.currentPrice) ||
           cache.cacheExpiry <= timeNow()
         ) {
-          const getCurrentPrice = await getDexPrice()
+          const { price, provider } = await getDexPrice()
           cache.cacheExpiry = timeNow() + cache.cacheTime
-          cache.previousPrice = isNaN(cache.currentPrice) ? getCurrentPrice : cache.currentPrice
-          cache.currentPrice = getCurrentPrice
+          cache.previousPrice = isNaN(cache.currentPrice) ? price : cache.currentPrice
+          cache.currentPrice = price
+          cache.provider = provider
         }
 
         // Generate our message
         const { previousPrice, currentPrice } = cache
         const emoji = currentPrice > previousPrice ? "<:GreenSafu:828471113754869770>" : "<:RedSafu:828471096734908467>"
-        const priceMessage = `${emoji} ${currentPrice}`
+        const priceMessage = `${emoji} ${currentPrice} _(${cache.provider})_`
 
         // Are we sharding?
         if (client.shard) {

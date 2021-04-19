@@ -5,7 +5,7 @@ module.exports.updatePresence = async (client) => {
    * Update the Discord rich presence status.
    */
   const presence = async () => {
-    let price = await getPrice()
+    let { price, provider } = await getPrice()
     client.user.setPresence({
       status: "online",
       activity: {
