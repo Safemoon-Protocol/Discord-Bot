@@ -1,20 +1,53 @@
+const { Collection } = require('discord.js');
 const { prefix } = require('./config.json')
+const fs = require('fs');
+const path = require('path');
+const { timeNow } = require('./utils/helper');
 
-module.exports = (client, commands, callback) => {
-    if (typeof commands === 'string') {
-        commands = [commands]
+const processCommands = (client, dir, stack = "") => {
+  const files = fs.readdirSync(dir);
+
+  // Find each file within the given directory
+  files.forEach((file) => {
+    if (fs.statSync(path.join(dir, file)).isDirectory())
+      return processCommands(client, path.join(dir, file), stack+file + "/")
+    
+    // Load the command file
+    const command = require(path.join(dir, file))
+
+    // Ensure some parameters are set
+    if (!command.meta.name || !command.meta.commands)
+      return console.warn('Ignoring', file, 'as the meta data is invalid (requires "name" and "commands").')
+    
+    // Description
+    if (!command.meta.description)
+      command.meta.description = ''
+
+    // Permissions
+    if (!command.meta.permissions)
+      command.meta.permissions = []
+
+    // Command Cooldown
+    if (!command.meta.cooldownTime)
+      command.meta.cooldownTime = 0
+
+    // Add per-command caching & cooldown logging
+    command.cache = {
+      ...command.cache || {},
+      cooldownExpiry: new Collection()
     }
 
-    client.on('message', (message) => {
-        const { content } = message
+    // Add our command to our pool
+    client.commands.set(command.meta.name, command)
+    console.log('Loaded the', `"${command.meta.name}"`, 'command')
 
-        commands.forEach((name) => {
-            const command = `${prefix}${name}`
+    // Remove from require cache
+    delete require.cache[require.resolve(path.join(dir, file))]
+  })
+}
 
-            if (content.startsWith(`${command} `) || content === command) {
-                console.log(`Running the command ${command}`)
-                callback(message)
-            }
-        })
-    })
+module.exports = (client) => {
+  // Create our commands set
+  client.commands = new Collection()
+  processCommands(client, path.join(__dirname, 'commands'))
 }
