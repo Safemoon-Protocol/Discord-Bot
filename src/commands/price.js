@@ -34,7 +34,7 @@ module.exports = ({
     // Return the price
     const { previousPrice, currentPrice } = cache
     let emoji = currentPrice > previousPrice ? "<:GreenSafu:828471113754869770>" : "<:RedSafu:828471096734908467>"
-    await message.channel.send(emoji + " " + price)
-    cache.previousPrice = price
+    await message.channel.send(emoji + " " + currentPrice)
+    cache.previousPrice = currentPrice
   }
 })
