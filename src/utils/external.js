@@ -8,6 +8,12 @@ const { contractAddress, bscScanApiKey } = require('../config.json')
 async function getDexPrice() {
   try {
     let response = await axios.get(`https://api.dex.guru/v1/tokens/${contractAddress}-bsc/`)
+
+    // Check to make sure we've received a valid price
+    // otherwise we'll default to pancake
+    let price = response.data['priceUSD'].toFixed(response.data['decimals'])
+    if (!price) throw ''
+
     return {
       price: response.data['priceUSD'].toFixed(response.data['decimals']),
       provider: 'dex.guru'

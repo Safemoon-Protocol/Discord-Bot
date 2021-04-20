@@ -1,4 +1,4 @@
-const { getPrice, getBurnedTotal, getCMCData } = require('./external')
+const { getDexPrice, getBurnedTotal, getCMCData } = require('./external')
 const { contractAddress } = require('../config.json')
 
 async function fetchPriceEmbed(client) {
