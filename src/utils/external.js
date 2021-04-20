@@ -12,7 +12,7 @@ async function getDexPrice() {
     // Check to make sure we've received a valid price
     // otherwise we'll default to pancake
     let price = response.data['priceUSD'].toFixed(response.data['decimals'])
-    if (!price) throw ''
+    if (!price || price == 0.00) throw ''
 
     return {
       price: response.data['priceUSD'].toFixed(response.data['decimals']),
