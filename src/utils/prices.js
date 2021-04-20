@@ -3,7 +3,7 @@ const { contractAddress } = require('../config.json')
 
 async function fetchPriceEmbed(client) {
   try {
-    let { price, provider } = await getPrice()
+    let { price, provider } = await getDexPrice()
     // let volume = (dexGuruData['volume24hUSD'] / 1_000_000).toFixed(4)
   
     let burnTotal = await getBurnedTotal()
