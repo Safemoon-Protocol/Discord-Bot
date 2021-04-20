@@ -1,5 +1,5 @@
 const axios = require('axios').default
-const { contractAddress } = require('../config.json')
+const { contractAddress, bscScanApiKey } = require('../config.json')
 
 /**
  * Function for obtaining the price from Dex.Guru's API.
@@ -7,7 +7,7 @@ const { contractAddress } = require('../config.json')
  */
 async function getDexPrice() {
   try {
-    let response = await axios.get('https://api.dex.guru/v1/tokens/' + contractAddress + '-bsc/')
+    let response = await axios.get(`https://api.dex.guru/v1/tokens/${contractAddress}-bsc/`)
     return {
       price: response.data['priceUSD'].toFixed(response.data['decimals']),
       provider: 'dex.guru'
@@ -37,7 +37,7 @@ async function getPancakePrice() {
 */
 async function getBurnedTotal() {
   try {
-    let response = await axios.get('https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=' + contractAddress + '&address=0x0000000000000000000000000000000000000001&tag=latest&apikey=YOUR_API_KEY_GOES_HERE');
+    let response = await axios.get(`https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=${contractAddress}&address=0x0000000000000000000000000000000000000001&tag=latest&apikey=${bscScanApiKey}`);
     let value = response.data['result']
     value = (value / 1_000_000_000_000_000_000_000).toFixed(4)
     return value
