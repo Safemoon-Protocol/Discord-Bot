@@ -1,7 +1,7 @@
-const { getPrice } = require('./external')
+const { getDexPrice } = require('./external')
 
 module.exports.updatePresence = async (client) => {
-  let { price } = await getPrice()
+  let { price } = await getDexPrice()
   client.user.setPresence({
     status: "online",
     activity: {
