@@ -15,8 +15,8 @@ const processJobs = (client, dir, stack = "") => {
     const job = require(path.join(dir, file))
 
     // Ensure some parameters are set
-    if (!job.meta.name || !job.meta.interval)
-      return console.warn('Ignoring', file, 'as the meta data is invalid (requires "name" and "interval").')
+    if (!job.meta.name || !job.meta.interval || job.meta.enabled === undefined)
+      return console.warn('Ignoring', file, 'as the meta data is invalid (requires "name", "interval" and "enabled").')
     
     // Add per-job caching
     job.cache = {
@@ -25,14 +25,21 @@ const processJobs = (client, dir, stack = "") => {
 
     // Add our job to our pool
     client.jobs.set(job.meta.name, job)
+
+    // Remove from require cache
+    delete require.cache[require.resolve(path.join(dir, file))]
+
+    // Run our job
+    if (!job.meta.enabled) {
+      console.log(`[JOB]: "${job.meta.name}" is disabled, so will not be executed.`)
+      return
+    }
+
     setInterval(async () => {
       await job.run(client, job.cache)
       console.log(`[RUNNER]: [${timeNow()}] "${job.meta.name}" was executed.`)
     }, job.meta.interval)
     console.log(`[JOB]: Running the "${job.meta.name}" job.`)
-
-    // Remove from require cache
-    delete require.cache[require.resolve(path.join(dir, file))]
   })
 }
 

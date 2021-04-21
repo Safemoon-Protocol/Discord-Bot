@@ -5,7 +5,8 @@ const { fetchPriceEmbed } = require('../utils/prices')
 module.exports = ({
   meta: {
     name: 'price-watch-job',
-    interval: 300 * 1000
+    interval: 15 * 1000,
+    enabled: true
   },
   run: async (client, cache) => {
     await mongo().then(async (db) => {

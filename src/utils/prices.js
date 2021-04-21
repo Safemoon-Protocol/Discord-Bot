@@ -39,7 +39,7 @@ async function fetchPriceEmbed(client) {
         "fields": [
           {
             "name": "💸 Price",
-            "value": `$${price}\n_(${provider})_`,
+            "value": `$${price} _(${provider})_`,
             "inline": true
           },
           {
