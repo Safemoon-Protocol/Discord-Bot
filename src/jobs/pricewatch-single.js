@@ -6,7 +6,8 @@ const { timeNow } = require('../utils/helper')
 module.exports = ({
   meta: {
     name: 'price-watch-single-job',
-    interval: 15 * 1000
+    interval: 15 * 1000,
+    enabled: true
   },
   cache: {
     cacheTime: 10,
