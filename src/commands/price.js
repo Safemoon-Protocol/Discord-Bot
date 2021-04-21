@@ -33,10 +33,10 @@ module.exports = ({
 
     // Return the price
     const { previousPrice, currentPrice } = cache
-    const GreenSafu = client.emojis.cache.get('828471113754869770') || ':green_square:'
-    const RedSafu = client.emojis.cache.get('828471096734908467') || ':red_square:'
+    const GreenSafu = client.emojis.cache.get('828471113754869770') || ':green_circle:'
+    const RedSafu = client.emojis.cache.get('828471096734908467') || ':red_circle:'
     const emoji = currentPrice > previousPrice ? GreenSafu : RedSafu
-    await message.channel.send(`${emoji} ${currentPrice} _(${cache.provider})_`)
+    await message.channel.send(`${emoji} **${currentPrice}** _(${cache.provider})_`)
     cache.previousPrice = currentPrice
   }
 })
