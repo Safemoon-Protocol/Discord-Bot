@@ -38,7 +38,7 @@ module.exports = ({
         // Generate our message
         const { previousPrice, currentPrice } = cache
         const emoji = currentPrice > previousPrice ? 'GreenSafu' : 'RedSafu'
-        const priceMessage = `${emoji} ${currentPrice} _(${cache.provider})_`
+        const priceMessage = `${emoji} **${currentPrice}** _(${cache.provider})_`
 
         // Are we sharding?
         if (client.shard) {
@@ -75,8 +75,8 @@ module.exports = ({
                   const channel = await guild.channels.cache.get(guildRow.channelId)
                   if (!channel) return
 
-                  const GreenSafu = this.emojis.cache.get('828471113754869770') || ':green_square:'
-                  const RedSafu = this.emojis.cache.get('828471096734908467') || ':red_square:'
+                  const GreenSafu = this.emojis.cache.get('828471113754869770') || ':green_circle:'
+                  const RedSafu = this.emojis.cache.get('828471096734908467') || ':red_circle:'
                   const message = \`${priceMessage}\`
 
                   await channel.send(message.replace('GreenSafu', GreenSafu).replace('RedSafu', RedSafu))
@@ -99,8 +99,8 @@ module.exports = ({
             const channel = await guild.channels.cache.get(guildRow.channelId)
             if (!channel) return
 
-            const GreenSafu = client.emojis.cache.get('828471113754869770') || ':green_square:'
-            const RedSafu = client.emojis.cache.get('828471096734908467') || ':red_square:'
+            const GreenSafu = client.emojis.cache.get('828471113754869770') || ':green_circle:'
+            const RedSafu = client.emojis.cache.get('828471096734908467') || ':red_circle:'
             await channel.send(priceMessage.replace('GreenSafu', GreenSafu).replace('RedSafu', RedSafu))
           })
         }
