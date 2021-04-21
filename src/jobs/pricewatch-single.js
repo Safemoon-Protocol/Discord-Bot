@@ -6,10 +6,10 @@ const { timeNow } = require('../utils/helper')
 module.exports = ({
   meta: {
     name: 'price-watch-single-job',
-    interval: 10 * 1000
+    interval: 15 * 1000
   },
   cache: {
-    cacheTime: 15,
+    cacheTime: 10,
     cacheExpiry: timeNow(),
     previousPrice: NaN,
     currentPrice: NaN,
@@ -37,7 +37,7 @@ module.exports = ({
 
         // Generate our message
         const { previousPrice, currentPrice } = cache
-        const emoji = currentPrice > previousPrice ? "<:GreenSafu:828471113754869770>" : "<:RedSafu:828471096734908467>"
+        const emoji = currentPrice > previousPrice ? 'GreenSafu' : 'RedSafu'
         const priceMessage = `${emoji} ${currentPrice} _(${cache.provider})_`
 
         // Are we sharding?
@@ -75,7 +75,11 @@ module.exports = ({
                   const channel = await guild.channels.cache.get(guildRow.channelId)
                   if (!channel) return
 
-                  await channel.send(\`${priceMessage}\`)
+                  const GreenSafu = this.emojis.cache.get('828471113754869770') || ':green_square:'
+                  const RedSafu = this.emojis.cache.get('828471096734908467') || ':red_square:'
+                  const message = \`${priceMessage}\`
+
+                  await channel.send(message.replace('GreenSafu', GreenSafu).replace('RedSafu', RedSafu))
                 })
               })()
             `)
@@ -95,7 +99,9 @@ module.exports = ({
             const channel = await guild.channels.cache.get(guildRow.channelId)
             if (!channel) return
 
-            await channel.send(priceMessage)
+            const GreenSafu = client.emojis.cache.get('828471113754869770') || ':green_square:'
+            const RedSafu = client.emojis.cache.get('828471096734908467') || ':red_square:'
+            await channel.send(priceMessage.replace('GreenSafu', GreenSafu).replace('RedSafu', RedSafu))
           })
         }
       }
