@@ -39,6 +39,8 @@ Copy the `config.example.json` file inside of the `src/` directory, and then upd
 {
   "token": "YOUR_BOT_TOKEN",
   "prefix": "default command prefix",
-  "mongoPath": "mongodb://localhost:27017/discordbot"
+  "mongoPath": "mongodb://localhost:27017/discordbot",
+  "contractAddress": "0x8076C74C5e3F5852037F31Ff0093Eeb8c8ADd8D3",
+  "bscScanApiKey": "YOUR_API_KEY_GOES_HERE"
 }
 ```
