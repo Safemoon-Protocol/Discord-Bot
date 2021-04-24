@@ -1,8 +1,7 @@
 <p align="center">
   <img src="https://safemoon.net/public/img/LogoAnim.gif" width="48" />
-  <span style="display: inline-block; vertical-align: top; margin-top: 0.25em; margin-left: 0.5em; font-size: 24px;">
-    SafeMoon
-  </span>
+  <br/>
+  <h3 align="center">SafeMoon</h3>
   <br/>
   Discord Bot 🚀
   <br/>
