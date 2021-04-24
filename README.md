@@ -87,6 +87,17 @@ update the values in the JSON file to your preference. The configuration file sh
 }
 ```
 
+To find your bot's token, go to the [Discord Developer Portal](https://discordapp.com/developers/applications/) and create
+a bot. Copy the token that Discord gives you, and place this inside of your configuration JSON file.
+
+| Configuration Setting | Information |
+| --------------------- | ----------- |
+| `token` | Get this from Discord's Developer Portal |
+| `prefix` | The prefix that will be used by the bot for each command |
+| `mongoPath` | The [connection URI](https://docs.mongodb.com/manual/reference/connection-string/) for the Mongo database |
+| `contractAddress` | The SafeBot contract address |
+| `bscScanApiKey` | Your generated [BscScan API Key](https://bscscan.com/myapikey) from your BscScan account |
+
 #### Running with Docker?
 
 If you're running the SafeBot within a containerised environment such as Docker, ensure that
@@ -101,16 +112,44 @@ above example, we would rename `localhost` to `db`, to match the container name 
 }
 ```
 
-To find your bot's token, go to the [Discord Developer Portal](https://discordapp.com/developers/applications/) and create
-a bot. Copy the token that Discord gives you, and place this inside of your configuration JSON file.
+There is also a `.env.example` file that you will need to copy & rename to `.env` when using Docker.
+You should set the `DISCORD_RUNNER` variable to either `local` or `shard`, depending on your criteria.
 
-| Configuration Setting | Information |
-| --------------------- | ----------- |
-| `token` | Get this from Discord's Developer Portal |
-| `prefix` | The prefix that will be used by the bot for each command |
-| `mongoPath` | The [connection URI](https://docs.mongodb.com/manual/reference/connection-string/) for the Mongo database |
-| `contractAddress` | The SafeBot contract address |
-| `bscScanApiKey` | Your generated [BscScan API Key](https://bscscan.com/myapikey) from your BscScan account |
+| Discord Runner | Criteria |
+| -------------- | -------- |
+| `local` | If you're running the bot on your local machine or for a small Discord server |
+| `shard` | If you're expecting the bot you're hosting to be on multiple large guilds |
+
+If you're running the bot on your local machine or without Docker, you can
+use the following command to start the bot.
+
+```bash
+$ npm run start
+```
+
+On the other hand, if you're using Docker & Docker Compose, you can use the
+following command to start the bot and its services.
+
+```bash
+$ docker-compose up -d
+
+# To view the logs of the bot, you can use this command
+$ docker-compose logs -f bot
+```
+
+#### Additional Information
+
+There are a few other commands that are baked into the `package.json` file for convenience.
+You can find them in the table below.
+
+| Command | Use Case |
+| ------- | -------- |
+| `npm run start` | Running the bot on your local machine |
+| `npm run shard` | Running the bot on your local machine, for multiple large guilds |
+| `npm run dev:local` | Run the bot via `nodemon`, to automatically restart it when files are changed |
+| `npm run dev:shard` | Run the bot via `nodemon`, to automatically restart it when files are changed |
+| `npm run docker:local` | **This command is used by `docker-compose.yml`**. Installs dependencies and then runs the bot without Discord sharding. |
+| `npm run docker:shard` | **This command is used by `docker-compose.yml`**. Installs dependencies and then runs the bot with Discord sharding enabled. |
 
 ## License
 
