@@ -81,7 +81,7 @@ update the values in the JSON file to your preference. The configuration file sh
 {
   "token": "YOUR_BOT_TOKEN",
   "prefix": "!",
-  "mongoPath": "mongodb://localhost:27017/discordbot",
+  "mongoPath": "mongodb://localhost:27017/",
   "contractAddress": "0x8076C74C5e3F5852037F31Ff0093Eeb8c8ADd8D3",
   "bscScanApiKey": "YOUR_API_KEY_GOES_HERE"
 }
@@ -107,13 +107,17 @@ above example, we would rename `localhost` to `db`, to match the container name 
 
 ```json
 {
-  "mongoPath": "mongodb://db:27017/",
+  "mongoPath": "mongodb://username:password@db:27017/",
   ...
 }
 ```
 
 There is also a `.env.example` file that you will need to copy & rename to `.env` when using Docker.
-You should set the `DISCORD_RUNNER` variable to either `local` or `shard`, depending on your criteria.
+
+From the `mongoPath` above, there is `username:password`, this should be whatever you set the environment
+variables of `MONGODB_USERNAME` and `MONGODB_PASSWORD` to in the `.env` file.
+
+You should set the `DISCORD_RUNNER` variable to either `local` or `shard`, depending on your criteria, see below.
 
 | Discord Runner | Criteria |
 | -------------- | -------- |
@@ -127,8 +131,8 @@ use the following command to start the bot.
 $ npm run start
 ```
 
-On the other hand, if you're using Docker & Docker Compose, you can use the
-following command to start the bot and its services.
+If you're using Docker & Docker Compose, you can use the following command
+to start the bot and its services.
 
 ```bash
 $ docker-compose up -d
