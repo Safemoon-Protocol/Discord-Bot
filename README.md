@@ -12,7 +12,7 @@
 <p align="center">
   <a href="#about">About</a>
   •
-  <a href="#features">Commands</a>
+  <a href="#commands">Commands</a>
   •
   <a href="#requirements">Requirements</a>
   •
