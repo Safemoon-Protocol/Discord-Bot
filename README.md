@@ -1,9 +1,10 @@
 <p align="center">
-  <img src="https://safemoon.net/public/img/LogoAnim.gif" width="48" />
+  <img src="https://safemoon.net/public/img/LogoAnim.gif" width="64" />
   <br/>
   <h3 align="center">SafeMoon</h3>
-  <br/>
-  Discord Bot 🚀
+</p>
+<p align="center">
+  <span align="center">Discord Bot 🚀</span>
   <br/>
   <a href ="https://safemoon.net/" target="_blank">https://safemoon.net/</a>
 </p>
