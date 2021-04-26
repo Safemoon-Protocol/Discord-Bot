@@ -4,6 +4,7 @@ const loadCommands = require('./commands')
 const loadJobs = require('./jobs')
 const config = require('./config.json')
 const { passedCooldown, setCommandCooldown } = require('./utils/cooldown')
+/* inlineReply */ require('discord-reply')
 
 // Create our bot client
 const client = new Client()
@@ -50,6 +51,7 @@ client.on('message', async (message) => {
 
     // Don't run the command if we're in a cooldown for this channel
     if (!passedCooldown(run, message)) {
+      message.react('⏱️')
       return console.warn('Not running', run.meta.name, 'due to cooldown')
     }
 

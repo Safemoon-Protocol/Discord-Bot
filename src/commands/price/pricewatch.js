@@ -1,7 +1,7 @@
-const mongo = require('../mongo')
-const setupSchema = require('../schemas/setup-schema')
-const { resetCooldown } = require('../utils/cooldown')
-const { fetchPriceEmbed } = require('../utils/prices')
+const mongo = require('../../mongo')
+const setupSchema = require('../../schemas/setup-schema')
+const { resetCooldown } = require('../../utils/cooldown')
+const { fetchPriceEmbed } = require('../../utils/prices')
 
 module.exports = ({
   meta: {

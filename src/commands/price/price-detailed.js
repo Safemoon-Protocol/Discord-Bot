@@ -1,4 +1,4 @@
-const { fetchPriceEmbed } = require('../utils/prices')
+const { fetchPriceEmbed } = require('../../utils/prices')
 
 module.exports = ({
   meta: {
