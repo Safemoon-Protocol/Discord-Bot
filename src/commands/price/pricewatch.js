@@ -1,5 +1,5 @@
 const mongo = require('../../mongo')
-const setupSchema = require('../../schemas/setup-schema')
+const priceWatchSchema = require('../../schemas/price-watch')
 const { resetCooldown } = require('../../utils/cooldown')
 const { fetchPriceEmbed } = require('../../utils/prices')
 
@@ -24,7 +24,7 @@ module.exports = ({
     // Add the channel to the database
     await mongo().then(async mongoose => {
       try {
-        await setupSchema.findOneAndUpdate({
+        await priceWatchSchema.findOneAndUpdate({
           _id: guild.id
         }, {
           _id: guild.id,

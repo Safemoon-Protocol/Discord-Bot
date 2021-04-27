@@ -1,5 +1,5 @@
 const mongo = require('../mongo')
-const setupSchema = require('../schemas/setup-schema')
+const priceWatchSchema = require('../schemas/price-watch')
 const { getDexPrice } = require('../utils/external')
 const { timeNow } = require('../utils/helper')
 
@@ -19,7 +19,7 @@ module.exports = ({
   run: async (client, cache) => {
     await mongo().then(async (db) => {
       try {
-        const guilds = await setupSchema.find({})
+        const guilds = await priceWatchSchema.find({})
         
         // To avoid spamming the API, this command has a cache
         // so that we just print the same result if we've already

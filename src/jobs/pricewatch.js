@@ -1,5 +1,5 @@
 const mongo = require('../mongo')
-const setupSchema = require('../schemas/setup-schema')
+const priceWatchSchema = require('../schemas/price-watch')
 const { fetchPriceEmbed } = require('../utils/prices')
 
 module.exports = ({
@@ -11,7 +11,7 @@ module.exports = ({
   run: async (client, cache) => {
     await mongo().then(async (db) => {
       try {
-        const guilds = await setupSchema.find({})
+        const guilds = await priceWatchSchema.find({})
         const priceEmbed = await fetchPriceEmbed()
 
         // Are we sharding?

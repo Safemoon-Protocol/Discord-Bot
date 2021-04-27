@@ -16,6 +16,8 @@ services:
   db:
     image: mongo:4.4.5
     container_name: safemoon-bot-db
+    ports:
+      - 27017:27017
     volumes:
         - safemoon-db:/data/db
         - safemoon-db-config:/data/configdb
