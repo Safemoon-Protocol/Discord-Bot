@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://safemoon.net/public/img/LogoAnim.gif" width="64" />
+  <img src="https://safemoon.net/public/img/logov2.gif" width="64" />
   <br/>
   <h3 align="center">SafeMoon</h3>
 </p>
