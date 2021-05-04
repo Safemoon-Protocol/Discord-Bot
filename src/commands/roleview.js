@@ -2,7 +2,6 @@ const mongo = require('../mongo')
 const roleScheduleSchema = require('../schemas/role-schedule')
 const { processCmd, isNumber, secsToDHMS } = require('../utils/helper')
 const { prefix } = require('../config.json')
-const moment = require('moment')
 
 module.exports = ({
   meta: {
