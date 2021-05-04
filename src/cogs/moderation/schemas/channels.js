@@ -1,10 +1,10 @@
 const mongoose = require('mongoose')
 const { requiredString } = require('.')
 
-const priceWatchSchema = mongoose.Schema({
+const channels = mongoose.Schema({
     _id: requiredString,
     channelId: requiredString,
     text: requiredString
 })
 
-module.exports = mongoose.model('setup', priceWatchSchema)
+module.exports = mongoose.model('channels', channels)
