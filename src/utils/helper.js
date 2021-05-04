@@ -13,7 +13,20 @@ const processCmd = (message) => {
 
 const timeNow = () => Math.floor(+new Date() / 1000)
 
+const isNumber = (str) => /\d+/.test(str)
+
+const secsToDHMS = (seconds) => {
+  seconds = Number(seconds);
+  var d = Math.floor(seconds / (3600 * 24))
+  var h = Math.floor(seconds % (3600 * 24) / 3600)
+  var m = Math.floor(seconds % 3600 / 60)
+  var s = Math.floor(seconds % 60)
+  return `${d}d, ${h}h, ${m}m, ${s}s`
+}
+
 module.exports = {
   processCmd,
-  timeNow
+  timeNow,
+  isNumber,
+  secsToDHMS
 }
