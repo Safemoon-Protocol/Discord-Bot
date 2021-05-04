@@ -35,10 +35,14 @@ const processJobs = (client, dir, stack = "") => {
       return
     }
 
+    // Start the job interval
     setInterval(async () => {
       await job.run(client, job.cache)
       console.log(`[RUNNER]: [${timeNow()}] "${job.meta.name}" was executed.`)
     }, job.meta.interval)
+
+    // Run the job now
+    job.run(client, job.cache)
     console.log(`[JOB]: Running the "${job.meta.name}" job.`)
   })
 }

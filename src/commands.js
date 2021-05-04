@@ -29,6 +29,10 @@ const processCommands = (client, dir, stack = "") => {
     if (!command.meta.cooldownTime)
       command.meta.cooldownTime = 0
 
+    // Guilds lock
+    if (!command.meta.guilds)
+      command.meta.guilds = []
+
     // Add per-command caching & cooldown logging
     command.cache = {
       ...command.cache || {},
