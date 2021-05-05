@@ -8,6 +8,7 @@ module.exports = ({
     name: 'roleschedule',
     description: 'Schedule a role for users within a guild',
     commands: ['roleschedule', 'rs'],
+    permissions: ['ADMINISTRATOR'],
     guilds: ['834574811186331720', '819206127979069460']
   },
   cache: {
