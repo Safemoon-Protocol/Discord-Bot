@@ -5,7 +5,7 @@ const { timeNow } = require('../utils/helper')
 module.exports = ({
   meta: {
     name: 'role-schedule',
-    interval: 60 * 1000, // ((60 * 60) * 6) * 1000, // 6 hours
+    interval: ((60 * 60) * 3) * 1000, // 3 hours
     enabled: true
   },
   run: async (client, cache) => {
