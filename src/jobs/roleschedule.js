@@ -100,7 +100,7 @@ module.exports = ({
         }
       }
       catch (e) {
-        console.warn(`[ROLESCHEDULE]: somethin fucked up: ${e}`)
+        console.warn(`[ROLESCHEDULE]: Something went wrong whilst trying to add roles: ${e}`)
       }
       finally {
         db.connection.close()
