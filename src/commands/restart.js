@@ -4,7 +4,7 @@ module.exports = ({
   meta: {
     name: 'restart',
     description: 'Restart the bot',
-    commands: ['restart', 'rv'],
+    commands: ['restart'],
     permissions: ['MANAGE_MESSAGES'],
     guilds: ['834574811186331720', '819206127979069460']
   },
