@@ -5,7 +5,7 @@ const { timeNow } = require('../utils/helper')
 module.exports = ({
   meta: {
     name: 'role-schedule',
-    interval: ((60 * 60) * 6) * 1000, // 6 hours
+    interval: 60 * 1000, // ((60 * 60) * 6) * 1000, // 6 hours
     enabled: true
   },
   run: async (client, cache) => {
@@ -15,10 +15,10 @@ module.exports = ({
 
         // Are we sharding?
         if (client.shard) {
+          // TODO
           console.log(`[ROLESCHEDULE]: Not implemented for sharded clients.`)
         }
         else {
-          // TODO
           const guildIds = client.guilds.cache.map((g) => g.id)
           schedules
             .filter((g) => guildIds.includes(g.guildId))
@@ -35,13 +35,16 @@ module.exports = ({
                     breaker = 0
                   }
 
+                  const joinedTimestamp = Math.floor(m.joinedTimestamp / 1000)
+                  const createdTimestamp = Math.floor(m.user.createdTimestamp / 1000)
+                  const timeLeftGuild = (joinedTimestamp - timeNow()) + entry.minimumLifeInGuild
+                  const timeLeftDiscord = (createdTimestamp - timeNow()) + entry.minimumLifeOnDiscord
+          
                   // Check to see if their Discord user is older than the specified time
-                  const { createdTimestamp } = m.user
-                  if ((timeNow() - Math.floor(createdTimestamp / 1000)) > entry.minimumLifeOnDiscord) return
+                  if (timeLeftDiscord > 0) return
 
                   // Check to see if they have been in this guild for a long enough time
-                  const { joinedTimestamp } = m
-                  if ((timeNow() - Math.floor(joinedTimestamp / 1000)) > entry.minimumLifeInGuild) return
+                  if (timeLeftGuild > 0) return
 
                   m.roles.add(entry.roleId)
                   console.log(`[ROLESCHEDULE]: Added Role (${entry.roleId}) to ${m.id}`)

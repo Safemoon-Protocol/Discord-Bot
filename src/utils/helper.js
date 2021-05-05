@@ -21,7 +21,7 @@ const secsToDHMS = (seconds) => {
   var h = Math.floor(seconds % (3600 * 24) / 3600)
   var m = Math.floor(seconds % 3600 / 60)
   var s = Math.floor(seconds % 60)
-  return `${d}d, ${h}h, ${m}m, ${s}s`
+  return `${d > 0 ? d : 0}d, ${h > 0 ? h : 0}h, ${m > 0 ? m : 0}m, ${s > 0 ? s : 0}s`
 }
 
 module.exports = {
