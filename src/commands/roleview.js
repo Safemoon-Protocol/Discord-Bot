@@ -6,8 +6,9 @@ const { prefix } = require('../config.json')
 module.exports = ({
   meta: {
     name: 'roleview',
-    description: 'Schedule a role for users within a guild',
+    description: 'View a scheduled roles details for this guild',
     commands: ['roleview', 'rv'],
+    permissions: ['MANAGE_MESSAGES'],
     guilds: ['834574811186331720', '819206127979069460']
   },
   run: async (client, cache, message) => {

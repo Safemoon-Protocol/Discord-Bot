@@ -19,8 +19,7 @@ module.exports = ({
           // Find guilds associated to each shard
           const shardedGuildIds = await client.shard.broadcastEval(`this.guilds.cache.map((g) => g.id)`)
           shardedGuildIds.forEach(async (guildIds, shardId) => {
-            const watchingGuilds = guildIds.filter((dbId) => guildIds.includes(dbId))
-            const guildsByCsv = watchingGuilds.join(',')
+            const guildsByCsv = guildIds.join(',')
             const dbGuildsAndChannels = guilds.map((g) => `${g.id}/${g.channelId}`).join(',')
             const embedJson = JSON.stringify(priceEmbed)
 
@@ -60,8 +59,7 @@ module.exports = ({
         else {
           // Get all guilds
           const guildIds = client.guilds.cache.map((g) => g.id)
-          const watchingGuilds = guildIds.filter((dbId) => guildIds.includes(dbId))
-          watchingGuilds.forEach(async (guildId) => {
+          guildIds.forEach(async (guildId) => {
             const guildRow = guilds.find((g) => g._id === guildId)
             if (!guildRow) return
 

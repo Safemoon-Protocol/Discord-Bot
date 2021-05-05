@@ -15,8 +15,53 @@ module.exports = ({
 
         // Are we sharding?
         if (client.shard) {
-          // TODO
-          console.log(`[ROLESCHEDULE]: Not implemented for sharded clients.`)
+          await client.shard.broadcastEval(`
+            (async () => {
+              const timeNow = () => Math.floor(+new Date() / 1000)
+
+              // Parse in scheduled JSON package
+              const guildIds = this.guilds.cache.map((g) => g.id)
+              const schedules = JSON.parse(\`${JSON.stringify(schedules)}\`)
+              let messages = []
+              const p = schedules
+                .filter((g) => guildIds.includes(g.guildId))
+                .map(async (entry) => {
+                  let breaker = 0
+                  const guild = await this.guilds.fetch(entry.guildId)
+                  const members = await guild.members.fetch()
+                  const membersWithoutRole = members.filter((m) => !m._roles.includes(entry.roleId))
+                  const promises = membersWithoutRole.map(async (m) => {
+                    try {
+                      // Add a delay to avoid API abuse
+                      if (breaker > 25) {
+                        await new Promise((r) => setTimeout(r, 3000))
+                        breaker = 0
+                      }
+
+                      const joinedTimestamp = Math.floor(m.joinedTimestamp / 1000)
+                      const createdTimestamp = Math.floor(m.user.createdTimestamp / 1000)
+                      const timeLeftGuild = (joinedTimestamp - timeNow()) + entry.minimumLifeInGuild
+                      const timeLeftDiscord = (createdTimestamp - timeNow()) + entry.minimumLifeOnDiscord
+
+                      // Check to see if their Discord user is older than the specified time
+                      if (timeLeftDiscord > 0) return
+
+                      // Check to see if they have been in this guild for a long enough time
+                      if (timeLeftGuild > 0) return
+
+                      m.roles.add(entry.roleId)
+                      console.log('[ROLESCHEDULE]: Added Role ' + entry.roleId + ') to ' + m.id)
+                      breaker++
+                    } catch (e) {
+                      messages.push('[ROLESCHEDULE]: Exception: ' + e)
+                    }
+                  })
+                  const results = await Promise.all(promises)
+                })
+              await Promise.all(p)
+              return messages
+            })()
+          `)
         }
         else {
           const guildIds = client.guilds.cache.map((g) => g.id)
@@ -39,7 +84,7 @@ module.exports = ({
                   const createdTimestamp = Math.floor(m.user.createdTimestamp / 1000)
                   const timeLeftGuild = (joinedTimestamp - timeNow()) + entry.minimumLifeInGuild
                   const timeLeftDiscord = (createdTimestamp - timeNow()) + entry.minimumLifeOnDiscord
-          
+
                   // Check to see if their Discord user is older than the specified time
                   if (timeLeftDiscord > 0) return
 
