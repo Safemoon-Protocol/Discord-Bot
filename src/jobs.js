@@ -36,7 +36,8 @@ const processJobs = (client, dir, stack = "") => {
     }
 
     // Start the job interval
-    setInterval(async () => {
+    job.cache.__interval__ = setInterval(async () => {
+      if (!job.meta.enabled) return
       await job.run(client, job.cache)
       console.log(`[RUNNER]: [${timeNow()}] "${job.meta.name}" was executed.`)
     }, job.meta.interval)
