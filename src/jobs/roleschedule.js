@@ -22,7 +22,6 @@ module.exports = ({
               // Parse in scheduled JSON package
               const guildIds = this.guilds.cache.map((g) => g.id)
               const schedules = JSON.parse(\`${JSON.stringify(schedules)}\`)
-              let messages = []
               const p = schedules
                 .filter((g) => guildIds.includes(g.guildId))
                 .map(async (entry) => {
@@ -53,13 +52,12 @@ module.exports = ({
                       console.log('[ROLESCHEDULE]: Added Role ' + entry.roleId + ') to ' + m.id)
                       breaker++
                     } catch (e) {
-                      messages.push('[ROLESCHEDULE]: Exception: ' + e)
+                      console.log('[ROLESCHEDULE]: Exception: ' + e)
                     }
                   })
                   const results = await Promise.all(promises)
                 })
               await Promise.all(p)
-              return messages
             })()
           `)
         }
