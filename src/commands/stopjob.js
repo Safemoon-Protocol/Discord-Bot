@@ -4,7 +4,7 @@ module.exports = ({
   meta: {
     name: 'stopjob',
     description: 'Stops a job from executing',
-    commands: ['stopjob', 'rv'],
+    commands: ['stopjob'],
     permissions: ['MANAGE_MESSAGES'],
     guilds: ['834574811186331720', '819206127979069460']
   },
