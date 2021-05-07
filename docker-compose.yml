@@ -1,3 +1,4 @@
+# Create the SafeMoon network via `docker network create safemoon`
 version: "3.7"
 
 # Configurable Settings
@@ -34,7 +35,7 @@ services:
 
 networks:
   safemoon:
-    external: false
+    external: true
 
 volumes:
     safemoon-db:
