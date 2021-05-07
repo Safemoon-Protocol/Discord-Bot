@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://safemoon.net/public/img/LogoAnim.gif" width="64" />
+  <img src="https://safemoon.net/img/logov2.gif" width="64" />
   <br/>
   <h3 align="center">SafeMoon</h3>
 </p>
@@ -88,7 +88,8 @@ update the values in the JSON file to your preference. The configuration file sh
 ```
 
 To find your bot's token, go to the [Discord Developer Portal](https://discordapp.com/developers/applications/) and create
-a bot. Copy the token that Discord gives you, and place this inside of your configuration JSON file.
+a bot. Copy the token that Discord gives you, and place this inside of your configuration JSON file. You will also need
+to give your bot on the Developer Portal privileged gateway intents, you can find this on the Bot Settings on the portal.
 
 | Configuration Setting | Information |
 | --------------------- | ----------- |

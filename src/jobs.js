@@ -35,11 +35,15 @@ const processJobs = (client, dir, stack = "") => {
         console.log(`[JOB]: "${job.meta.name}" is disabled, so will not be executed.`)
         return
       }
-
-      setInterval(async () => {
+      // Start the job interval
+      job.cache.__interval__ = setInterval(async () => {
+        if (!job.meta.enabled) return
         await job.run(client, job.cache)
         console.log(`[RUNNER]: [${timeNow()}] "${job.meta.name}" was executed.`)
       }, job.meta.interval)
+  
+      // Run the job now
+      job.run(client, job.cache)
       console.log(`[JOB]: Running the "${job.meta.name}" job.`)
     }
     catch {}
