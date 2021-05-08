@@ -1,4 +1,4 @@
-const { processCmd } = require('../utils/helper')
+const { processCmd } = require('../../utils/helper')
 
 module.exports = ({
   meta: {

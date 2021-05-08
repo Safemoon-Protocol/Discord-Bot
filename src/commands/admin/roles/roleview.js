@@ -1,7 +1,7 @@
-const mongo = require('../mongo')
-const roleScheduleSchema = require('../schemas/role-schedule')
-const { processCmd, isNumber, secsToDHMS } = require('../utils/helper')
-const { prefix } = require('../config.json')
+const mongo = require('../../../mongo')
+const roleScheduleSchema = require('../../../schemas/role-schedule')
+const { processCmd, isNumber, secsToDHMS } = require('../../../utils/helper')
+const { prefix } = require('../../../config.json')
 
 module.exports = ({
   meta: {
