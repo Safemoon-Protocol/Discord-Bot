@@ -1,5 +1,6 @@
 const mongo = require('../mongo')
 const roleScheduleSchema = require('../schemas/role-schedule')
+const jobSchema = require('../schemas/jobs')
 const { timeNow } = require('../utils/helper')
 
 module.exports = ({
@@ -17,15 +18,20 @@ module.exports = ({
 
         // Are we sharding?
         if (client.shard) {
+          // Find guilds that are excluded from this job
+          const jobsExcluded = await jobSchema.find({ jobState: false, jobName: 'role-schedule' })
+          const excludedGuilds = JSON.stringify(jobsExcluded.map((exc) => exc.guildId))
+
           await client.shard.broadcastEval(`
             (async () => {
+              const excludedGuilds = JSON.parse(\`${excludedGuilds}\`)
               const timeNow = () => Math.floor(+new Date() / 1000)
 
               // Parse in scheduled JSON package
               const guildIds = this.guilds.cache.map((g) => g.id)
               const schedules = JSON.parse(\`${JSON.stringify(schedules)}\`)
               const p = schedules
-                .filter((g) => guildIds.includes(g.guildId))
+                .filter((g) => guildIds.includes(g.guildId) && !excludedGuilds.includes(g.guildId))
                 .map(async (entry) => {
                   let breaker = 0
                   const guild = await this.guilds.fetch(entry.guildId)
@@ -64,9 +70,13 @@ module.exports = ({
           `)
         }
         else {
+          // Find guilds that are excluded from this job
+          const jobsExcluded = await jobSchema.find({ jobState: false, jobName: 'role-schedule' })
+          const excludedGuilds = JSON.stringify(jobsExcluded.map((exc) => exc.guildId))
+
           const guildIds = client.guilds.cache.map((g) => g.id)
           schedules
-            .filter((g) => guildIds.includes(g.guildId))
+            .filter((g) => guildIds.includes(g.guildId) && !excludedGuilds.includes(g.guildId))
             .map(async (entry) => {
               let breaker = 0
               const guild = await client.guilds.fetch(entry.guildId)

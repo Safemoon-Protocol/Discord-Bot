@@ -36,15 +36,8 @@ const processJobs = (client, dir, stack = "") => {
       // Remove from require cache
       delete require.cache[require.resolve(path.join(dir, file))]
 
-      // Run our job
-      if (!job.meta.enabled) {
-        console.log(`[JOB]: "${job.meta.name}" is disabled, so will not be executed.`)
-        return
-      }
-
       // Start the job interval
       job.cache.__interval__ = setInterval(async () => {
-        if (!job.meta.enabled) return
         await job.run(client, job.cache)
         console.log(`[RUNNER]: [${timeNow()}] "${job.meta.name}" was executed.`)
       }, job.meta.interval)
