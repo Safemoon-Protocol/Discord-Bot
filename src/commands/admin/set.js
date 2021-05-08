@@ -18,7 +18,7 @@ module.exports = ({
     const channel = message.mentions.channels.first() || null
 
     if (!type) {
-      return await message.lineReply('Please specify a log channel type.')
+      return await message.lineReply('Please specify a log channel type, usage: `!setlog <type> <#channel>`')
     }
 
     if (!cache.logTypes.includes(type.toLowerCase())) {

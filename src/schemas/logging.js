@@ -3,8 +3,8 @@ const { requiredString } = require('.')
 
 const loggingSchema = mongoose.Schema({
   guildId: requiredString,
-  logType: requiredString,
-  logChannel: requiredString
+  channelId: requiredString,
+  logType: requiredString
 })
 
 module.exports = mongoose.model('log_channels', loggingSchema)

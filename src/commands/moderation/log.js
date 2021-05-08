@@ -1,4 +1,5 @@
-const Discord = require('discord.js')
+const mongo = require('../../mongo')
+const loggingSchema = require('../../schemas/logging')
 const Canvas = require('canvas')
 const { prefix } = require('../../config.json')
 const { MessageAttachment } = require('discord.js')
@@ -18,6 +19,24 @@ module.exports = ({
     logTypes: ['warn', 'kick', 'ban']
   },
   run: async (client, cache, message) => {
+    // Check if the modlog channel is set
+    const db = await mongo()
+    const logChannel = await loggingSchema.findOne({ guildId: message.guild.id, logType: 'mod' })
+    if (!logChannel) {
+      if (message.member.hasPermission("ADMINISTRATOR")) {
+        return await message.lineReply(`Please set your logging channel first using: \`!setlog mod #channel\``)
+      }
+      return await message.lineReply(`Please ask an Administrator to set up the logging channels via \`!setlog\`.`)
+    }
+    db.connection.close()
+
+    // Check if the channel actually exists
+    // TODO: why the hell doesn't this work? api dumb, d.py masterrace
+    const postChannel = await message.guild.channels.get(logChannel.channelId)
+    if (!postChannel) {
+      return await message.lineReply(`The log channel set for moderation logs is invalid (<@${logChannel.channelId}>). Please set it up again via \`!setlog\`.`)
+    }
+
     const { args } = processCmd(message)
     const logType = (args.shift() || '').toLowerCase()
     const deleteOnLog = args.map((v) => v.toLowerCase()).includes('--del')
@@ -81,7 +100,7 @@ module.exports = ({
 
       await Promise.all([
         message.react('✅'),
-        message.channel.send(logMsg, { files: attachments, embeds: embeds })
+        postChannel.send(logMsg, { files: attachments, embeds: embeds })
       ])
 
       // Are we deleting?
