@@ -86,6 +86,9 @@ module.exports = ({
           })
         }
       }
+      catch (e) {
+        console.warn('Caught error on Price Watch Single Job:\n', e)
+      }
       finally {
         db.connection.close()
       }

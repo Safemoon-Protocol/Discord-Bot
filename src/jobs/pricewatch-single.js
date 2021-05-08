@@ -100,7 +100,7 @@ module.exports = ({
 
           // Get all guilds
           const guildIds = client.guilds.cache.map((g) => g.id)
-          const watchingGuilds = guildIds.filter((dbId) => guildIds.includes(dbId))
+          const watchingGuilds = guildIds.filter((dbId) => !excludedGuilds.includes(dbId))
           watchingGuilds.forEach(async (guildId) => {
             const guildRow = guilds.find((g) => g._id === guildId)
             if (!guildRow) return
@@ -116,6 +116,9 @@ module.exports = ({
             await channel.send(priceMessage.replace('GreenSafu', GreenSafu).replace('RedSafu', RedSafu))
           })
         }
+      }
+      catch (e) {
+        console.warn('Caught error on Price Watch Single Job:\n', e)
       }
       finally {
         db.connection.close()

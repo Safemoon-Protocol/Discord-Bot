@@ -112,7 +112,7 @@ module.exports = ({
         }
       }
       catch (e) {
-        console.warn(`[ROLESCHEDULE]: Something went wrong whilst trying to add roles: ${e}`)
+        console.warn(`[ROLESCHEDULE]: Something went wrong whilst trying to run the role scheduler: ${e}`)
       }
       finally {
         db.connection.close()
