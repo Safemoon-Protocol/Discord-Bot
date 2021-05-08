@@ -5,7 +5,9 @@ const { fetchPriceEmbed } = require('../utils/prices')
 module.exports = ({
   meta: {
     name: 'price-watch-job',
+    description: 'Sends an embed message of the current statistics of SafeMoon',
     interval: 300 * 1000,
+    guildControlled: true,
     enabled: true
   },
   run: async (client, cache) => {

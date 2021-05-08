@@ -5,8 +5,10 @@ const { timeNow } = require('../utils/helper')
 module.exports = ({
   meta: {
     name: 'role-schedule',
+    description: 'Checks to see if users match a guilds criteria for a scheduled role',
     interval: ((60 * 60) * 3) * 1000, // 3 hours
-    enabled: true
+    guildControlled: true,
+    enabled: false
   },
   run: async (client, cache) => {
     await mongo().then(async (db) => {

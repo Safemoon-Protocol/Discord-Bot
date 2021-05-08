@@ -6,7 +6,9 @@ const { timeNow } = require('../utils/helper')
 module.exports = ({
   meta: {
     name: 'price-watch-single-job',
+    description: 'Sends a single message of the current price of SafeMoon',
     interval: 15 * 1000,
+    guildControlled: true,
     enabled: true
   },
   cache: {
