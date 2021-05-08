@@ -16,8 +16,14 @@ const processJobs = (client, dir, stack = "") => {
       const job = require(path.join(dir, file))
 
       // Ensure some parameters are set
-      if (!job.meta.name || !job.meta.interval || job.meta.enabled === undefined)
-        return console.warn('Ignoring', file, 'as the meta data is invalid (requires "name", "interval" and "enabled").')
+      if (
+        !job.meta.name ||
+        !job.meta.interval ||
+        job.meta.guildControlled === undefined ||
+        job.meta.enabled === undefined
+      ) {
+        return console.warn('Ignoring', file, 'as the meta data is invalid (requires "name", "interval", "guildControlled" and "enabled").')
+      }
       
       // Add per-job caching
       job.cache = {
@@ -35,6 +41,7 @@ const processJobs = (client, dir, stack = "") => {
         console.log(`[JOB]: "${job.meta.name}" is disabled, so will not be executed.`)
         return
       }
+
       // Start the job interval
       job.cache.__interval__ = setInterval(async () => {
         if (!job.meta.enabled) return

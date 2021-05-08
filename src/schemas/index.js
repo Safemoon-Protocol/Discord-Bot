@@ -8,7 +8,13 @@ const requiredNumber = {
   required: true
 }
 
+const requiredBool = {
+  type: Boolean,
+  required: true
+}
+
 module.exports = {
   requiredString,
   requiredNumber,
+  requiredBool,
 }
