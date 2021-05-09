@@ -31,7 +31,6 @@ module.exports = ({
     db.connection.close()
 
     // Check if the channel actually exists
-    // TODO: why the hell doesn't this work? api dumb, d.py masterrace
     const postChannel = await client.channels.fetch(logChannel.channelId)
     if (!postChannel) {
       return await message.lineReply(`The log channel set for moderation logs is invalid (<@${logChannel.channelId}>). Please set it up again via \`!setlog\`.`)
