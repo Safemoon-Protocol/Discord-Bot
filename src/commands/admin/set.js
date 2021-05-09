@@ -37,7 +37,7 @@ module.exports = ({
         }, {
           guildId: message.guild.id,
           logType: type.toLowerCase(),
-          logChannel: channel.id
+          channelId: channel.id
         }, {
           upsert: true
         }).then(async () => {
