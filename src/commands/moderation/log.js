@@ -1,4 +1,3 @@
-const mongo = require('../../mongo')
 const loggingSchema = require('../../schemas/logging')
 const Canvas = require('canvas')
 const { prefix } = require('../../config.json')
@@ -20,7 +19,6 @@ module.exports = ({
   },
   run: async (client, cache, message) => {
     // Check if the modlog channel is set
-    const db = await mongo()
     const logChannel = await loggingSchema.findOne({ guildId: message.guild.id, logType: 'mod' })
     if (!logChannel) {
       if (message.member.hasPermission("ADMINISTRATOR")) {
@@ -28,7 +26,6 @@ module.exports = ({
       }
       return await message.lineReply(`Please ask an Administrator to set up the logging channels via \`!setlog\`.`)
     }
-    db.connection.close()
 
     // Check if the channel actually exists
     const postChannel = await client.channels.fetch(logChannel.channelId)

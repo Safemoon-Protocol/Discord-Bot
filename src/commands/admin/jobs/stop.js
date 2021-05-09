@@ -1,5 +1,4 @@
 const { processCmd } = require('../../../utils/helper')
-const mongo = require('../../../mongo')
 const jobSchema = require('../../../schemas/jobs')
 
 module.exports = ({
@@ -25,29 +24,26 @@ module.exports = ({
     if (!job.meta.guildControlled) {
       return await message.lineReply('Unable to disable a job that is not guild controlled.')
     }
-    
-    await mongo().then(async mongoose => {
-      try {
-        // Check if the job is already disabled
-        const existingJob = await jobSchema.findOne({ guildId: guild.id, jobName: job.meta.name, jobState: false })
-        if (existingJob) {
-          return await message.lineReply(`The specified job (${job.meta.name}) is already disabled for this guild.`)
-        }
 
-        await jobSchema.findOneAndUpdate({
-          guildId: guild.id,
-          jobName: job.meta.name
-        }, {
-          guildId: guild.id,
-          jobName: job.meta.name,
-          jobState: false
-        }, {
-          upsert: true
-        })
-        return await message.reply('Successfully disabled `' + jobName + '`, this job will no longer run on the jobs interval.')
-      } finally {
-        mongoose.connection.close()
+    try {
+      // Check if the job is already disabled
+      const existingJob = await jobSchema.findOne({ guildId: guild.id, jobName: job.meta.name, jobState: false })
+      if (existingJob) {
+        return await message.lineReply(`The specified job (${job.meta.name}) is already disabled for this guild.`)
       }
-    })
+
+      await jobSchema.findOneAndUpdate({
+        guildId: guild.id,
+        jobName: job.meta.name
+      }, {
+        guildId: guild.id,
+        jobName: job.meta.name,
+        jobState: false
+      }, {
+        upsert: true
+      })
+      return await message.reply('Successfully disabled `' + jobName + '`, this job will no longer run on the jobs interval.')
+    }
+    catch {}
   }
 })

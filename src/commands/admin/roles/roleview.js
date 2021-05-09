@@ -1,4 +1,3 @@
-const mongo = require('../../../mongo')
 const roleScheduleSchema = require('../../../schemas/role-schedule')
 const { processCmd, isNumber, secsToDHMS } = require('../../../utils/helper')
 const { prefix } = require('../../../config.json')
@@ -34,22 +33,18 @@ module.exports = ({
       }
     }
 
-    // Get the scheduled role
-    await mongo().then(async mongoose => {
-      // Check if a roleschedule has already been setup for the specified args
-      let scheduled = await roleScheduleSchema.findOne({ guildId: guild.id, roleId });
-      if (!scheduled) {
-        mongoose.connection.close()
-        return await message.reply(`:x: A role schedule for \`${roleId}\` does not exist.`)
-      }
-
-      await message.reply({ embed: {
-        "title": "**Scheduled Role: View**",
-        "description": `**Guild ID:** ${guild.id}\n**Role ID:** ${roleId}\n**Required length in guild:** ${secsToDHMS(scheduled.minimumLifeInGuild)}\n**Required length on Discord:** ${secsToDHMS(scheduled.minimumLifeOnDiscord)}`,
-        "color": 2029249,
-        "timestamp": new Date()
-      }})
+    // Check if a roleschedule has already been setup for the specified args
+    let scheduled = await roleScheduleSchema.findOne({ guildId: guild.id, roleId });
+    if (!scheduled) {
       mongoose.connection.close()
-    })
+      return await message.reply(`:x: A role schedule for \`${roleId}\` does not exist.`)
+    }
+
+    await message.reply({ embed: {
+      "title": "**Scheduled Role: View**",
+      "description": `**Guild ID:** ${guild.id}\n**Role ID:** ${roleId}\n**Required length in guild:** ${secsToDHMS(scheduled.minimumLifeInGuild)}\n**Required length on Discord:** ${secsToDHMS(scheduled.minimumLifeOnDiscord)}`,
+      "color": 2029249,
+      "timestamp": new Date()
+    }})
   }
 })

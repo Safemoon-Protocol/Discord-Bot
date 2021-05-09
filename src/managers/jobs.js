@@ -1,7 +1,7 @@
 const { Collection } = require('discord.js')
 const fs = require('fs')
 const path = require('path')
-const { timeNow } = require('./utils/helper')
+const { timeNow } = require('../utils/helper')
 
 const processJobs = (client, dir, stack = "") => {
   const files = fs.readdirSync(dir)
@@ -53,5 +53,5 @@ const processJobs = (client, dir, stack = "") => {
 module.exports = (client) => {
   // Create our jobs set
   client.jobs = new Collection()
-  processJobs(client, path.join(__dirname, 'jobs'))
+  processJobs(client, path.join(__dirname, '..', 'jobs'))
 }

@@ -1,5 +1,5 @@
 const { Collection } = require('discord.js')
-const { capitalize } = require('./utils')
+const { capitalize } = require('../utils')
 const fs = require('fs')
 const path = require('path')
 
@@ -51,12 +51,12 @@ const processCommands = (client, dir, stack = "") => {
       // Remove from require cache
       delete require.cache[require.resolve(path.join(dir, file))]
     }
-    catch {}
+    catch (e) { console.log(e) }
   })
 }
 
 module.exports = (client) => {
   // Create our commands set
   client.commands = new Collection()
-  processCommands(client, path.join(__dirname, 'commands'))
+  processCommands(client, path.join(__dirname, '..', 'commands'))
 }

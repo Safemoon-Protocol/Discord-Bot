@@ -1,5 +1,4 @@
 const { processCmd } = require('../../../utils/helper')
-const mongo = require('../../../mongo')
 const jobSchema = require('../../../schemas/jobs')
 
 module.exports = ({
@@ -26,29 +25,25 @@ module.exports = ({
       return await message.lineReply('Unable to enable a job that is not guild controlled.')
     }
     
-    await mongo().then(async mongoose => {
-      try {
-        // Check if the job is already enabled
-        const existingJob = await jobSchema.findOne({ guildId: guild.id, jobName: job.meta.name, jobState: true })
-        if (existingJob) {
-          return await message.lineReply(`The specified job (${job.meta.name}) is already enabled for this guild.`)
-        }
-
-        await jobSchema.findOneAndUpdate({
-          guildId: guild.id,
-          jobName: job.meta.name
-        }, {
-          guildId: guild.id,
-          jobName: job.meta.name,
-          jobState: true
-        }, {
-          upsert: true
-        })
-        return await message.reply('Successfully enabled `' + jobName + '`, this will execute on the jobs next interval.')
-      } finally {
-        mongoose.connection.close()
+    try {
+      // Check if the job is already enabled
+      const existingJob = await jobSchema.findOne({ guildId: guild.id, jobName: job.meta.name, jobState: true })
+      if (existingJob) {
+        return await message.lineReply(`The specified job (${job.meta.name}) is already enabled for this guild.`)
       }
-    })
 
+      await jobSchema.findOneAndUpdate({
+        guildId: guild.id,
+        jobName: job.meta.name
+      }, {
+        guildId: guild.id,
+        jobName: job.meta.name,
+        jobState: true
+      }, {
+        upsert: true
+      })
+      return await message.reply('Successfully enabled `' + jobName + '`, this will execute on the jobs next interval.')
+    }
+    catch {}
   }
 })

@@ -1,6 +1,5 @@
 const { processCmd } = require('../../utils/helper')
 const loggingSchema = require('../../schemas/logging')
-const mongo = require('../../mongo')
 
 module.exports = ({
   meta: {
@@ -29,27 +28,23 @@ module.exports = ({
       return await message.lineReply(`Please mention a channel to set as the \`${type}\` channel.`)
     }
 
-    await mongo().then(async (db) => {
-      try {
-        await loggingSchema.findOneAndUpdate({
-          guildId: message.guild.id,
-          logType: type.toLowerCase()
-        }, {
-          guildId: message.guild.id,
-          logType: type.toLowerCase(),
-          channelId: channel.id
-        }, {
-          upsert: true
-        }).then(async () => {
-          return await message.lineReply(`:white_check_mark: Successfully set the \`${type}\` channel to ${channel}!`)
-        }).catch(async (e) => {
-          console.log(e)
-          return await message.lineReply(`:x: Failed to set the \`${type}\` channel, please try again!`)
-        })
-      }
-      finally {
-        db.connection.close()
-      }
-    })
+    try {
+      await loggingSchema.findOneAndUpdate({
+        guildId: message.guild.id,
+        logType: type.toLowerCase()
+      }, {
+        guildId: message.guild.id,
+        logType: type.toLowerCase(),
+        channelId: channel.id
+      }, {
+        upsert: true
+      }).then(async () => {
+        return await message.lineReply(`:white_check_mark: Successfully set the \`${type}\` channel to ${channel}!`)
+      }).catch(async (e) => {
+        console.log(e)
+        return await message.lineReply(`:x: Failed to set the \`${type}\` channel, please try again!`)
+      })
+    }
+    catch {}
   }
 })

@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
-const { mongoPath } = require('./config.json')
+const { mongoPath } = require('../config.json')
 const { MONGO_INITDB_DATABASE_NAME } = process.env
 
-module.exports = () => {
-  return mongoose.connect(mongoPath, {
+module.exports = async () => {
+  return await mongoose.connect(mongoPath, {
     useFindAndModify: false,
     useNewUrlParser: true,
     useUnifiedTopology: true,

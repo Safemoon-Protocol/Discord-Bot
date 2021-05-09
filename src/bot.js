@@ -1,7 +1,9 @@
 const { Client, Intents } = require('discord.js')
 const { updatePresence } = require('./utils/presence')
-const loadCommands = require('./commands')
-const loadJobs = require('./jobs')
+const getDb = require('./managers/database')
+const loadCogs = require('./managers/cogs')
+const loadCommands = require('./managers/commands')
+const loadJobs = require('./managers/jobs')
 const config = require('./config.json')
 const { passedCooldown, setCommandCooldown } = require('./utils/cooldown')
 /* inlineReply */ require('discord-reply')
@@ -19,10 +21,14 @@ const client = new Client({
 client.on('ready', async () => {
   console.log(client.user.tag + ' has logged in.')
 
+  // Initialise database
+  client.db = await getDb()
+
   // Update Presence (and start interval)
   await updatePresence(client)
   
-  // Load commands & jobs
+  // Load cogs, commands & jobs
+  await loadCogs(client)
   await loadCommands(client)
   await loadJobs(client)
 });

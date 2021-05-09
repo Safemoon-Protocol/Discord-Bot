@@ -1,4 +1,3 @@
-const mongo = require('../../../mongo')
 const roleScheduleSchema = require('../../../schemas/role-schedule')
 const { processCmd, isNumber } = require('../../../utils/helper')
 const { prefix } = require('../../../config.json')
@@ -45,31 +44,28 @@ module.exports = ({
       return await message.reply(`:x: Please specify \`guildTime\` or \`discordTime\` as seconds.`)
     }
 
-    await mongo().then(async mongoose => {
-      // Check if a roleschedule has already been setup for the specified args
-      if (await roleScheduleSchema.findOne({ guildId: guild.id, roleId })) {
-        mongoose.connection.close()
-        return await message.reply(`:x: A role schedule for <@&${roleId}> has already been created. Use \`${prefix}roleview ${roleId}\` to view details.`)
-      }
+    // Check if a roleschedule has already been setup for the specified args
+    if (await roleScheduleSchema.findOne({ guildId: guild.id, roleId })) {
+      mongoose.connection.close()
+      return await message.reply(`:x: A role schedule for <@&${roleId}> has already been created. Use \`${prefix}roleview ${roleId}\` to view details.`)
+    }
 
-      // Create schema entry
-      try {
-        await roleScheduleSchema.findOneAndUpdate({
-          guildId: guild.id,
-          roleId: roleId
-        }, {
-          guildId: guild.id,
-          roleId: roleId,
-          minimumLifeInGuild: guildTime,
-          minimumLifeOnDiscord: discordTime
-        }, {
-          upsert: true
-        })
-      } finally {
-        mongoose.connection.close()
-      }
+    // Create schema entry
+    try {
+      await roleScheduleSchema.findOneAndUpdate({
+        guildId: guild.id,
+        roleId: roleId
+      }, {
+        guildId: guild.id,
+        roleId: roleId,
+        minimumLifeInGuild: guildTime,
+        minimumLifeOnDiscord: discordTime
+      }, {
+        upsert: true
+      })
+    }
+    catch {}
 
-      return message.reply(`:white_check_mark: Successfully scheduled the <@&${roleId.id || roleId}> role to be added to users after ${guildTime} seconds in this guild, and ${discordTime} seconds on Discord.`)
-    })
+    return message.reply(`:white_check_mark: Successfully scheduled the <@&${roleId.id || roleId}> role to be added to users after ${guildTime} seconds in this guild, and ${discordTime} seconds on Discord.`)
   }
 })
