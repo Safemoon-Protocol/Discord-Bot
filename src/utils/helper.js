@@ -36,17 +36,15 @@ const validateText = (text, regex) => {
 
 // parse interval and return miliseconds
 const parseInterval = (interval) => {
-  const splitted = interval.split(':');
-  var h = Number(removeZero(splitted[0]));
-  var m = Number(removeZero(splitted[1]));
-  var s = Number(removeZero(splitted[2]));
+  interval = interval.replace(/\s|,/g, '');
+  const splitted = interval.split(/[a-z]/);
 
-  return ((h * 3600) + (m * 60) + s) * 1000;
-}
+  var d = Number(splitted[0]);
+  var h = Number(splitted[1]);
+  var m = Number(splitted[2]);
+  var s = Number(splitted[3]);
 
-// remove zero from interval part format
-const removeZero = (intervalPart) => {
-  return intervalPart[0] === '0' ? intervalPart[1] : intervalPart;
+  return ((d * 24 * 3600) + (h * 3600) + (m * 60) + s) * 1000;
 }
 
 const getISODate = () => {
@@ -60,6 +58,5 @@ module.exports = {
   secsToDHMS,
   validateText,
   parseInterval,
-  removeZero,
   getISODate,
 }

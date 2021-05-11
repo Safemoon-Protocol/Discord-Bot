@@ -13,9 +13,10 @@ module.exports = ({
     const { args } = processCmd(message)
     const { guild } = message
     const jobName = args.shift() || null
-    const intervalText = args.shift() || null;
+    const intervalText = args.join(" ");
     let interval = null;
     let lastJob = null;
+
 
     if (!jobName) {
       return await message.lineReply('Please specify a Job name: \n```\n' + Array.from(client.jobs.keys()).join('\n') + '\n```')
@@ -32,12 +33,12 @@ module.exports = ({
 
     if(intervalText) {
       if (!validateText(intervalText, INTERVAL_FORMAT)) {
-        return await message.lineReply('Specified format is incorrect. The correct format is HH:MM:SS');
+        return await message.lineReply(`Specified format is incorrect. The correct format is ${secsToDHMS(0)}`);
       }
 
       interval = parseInterval(intervalText);
       if(job.meta.interval >= interval) {
-        return await message.lineReply(`The interval cannot be lesser than ${secsToDHMS(Math.floor(job.meta.interval / 1000))}`);
+        return await message.lineReply(`The interval cannot be lesser or equal to ${secsToDHMS(Math.floor(job.meta.interval / 1000))}`);
       }
       interval = Math.floor(interval / 1000);
       lastJob = getISODate();
