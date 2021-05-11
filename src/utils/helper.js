@@ -24,9 +24,42 @@ const secsToDHMS = (seconds) => {
   return `${d > 0 ? d : 0}d, ${h > 0 ? h : 0}h, ${m > 0 ? m : 0}m, ${s > 0 ? s : 0}s`
 }
 
+// validate string against regex
+const validateText = (text, regex) => {
+  if(!text) {
+    return false;
+  }
+
+  const matched = text.match(regex);
+  return !!matched && matched.length > 0;
+}
+
+// parse interval and return miliseconds
+const parseInterval = (interval) => {
+  const splitted = interval.split(':');
+  var h = Number(removeZero(splitted[0]));
+  var m = Number(removeZero(splitted[1]));
+  var s = Number(removeZero(splitted[2]));
+
+  return ((h * 3600) + (m * 60) + s) * 1000;
+}
+
+// remove zero from interval part format
+const removeZero = (intervalPart) => {
+  return intervalPart[0] === '0' ? intervalPart[1] : intervalPart;
+}
+
+const getISODate = () => {
+  return new Date().toISOString();
+}
+
 module.exports = {
   processCmd,
   timeNow,
   isNumber,
-  secsToDHMS
+  secsToDHMS,
+  validateText,
+  parseInterval,
+  removeZero,
+  getISODate,
 }
