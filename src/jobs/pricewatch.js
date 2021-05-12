@@ -1,26 +1,44 @@
 const priceWatchSchema = require('../schemas/price-watch')
 const jobSchema = require('../schemas/jobs')
 const { fetchPriceEmbed } = require('../utils/prices')
-const { getExcludedGuilds } = require('./helper/helper')
+const { getExcludedGuilds, timeNow, getISODate } = require('../utils/helper');
+const { DEFAULT_PRICE_WATCH_INTERVAL } = require('../constants/constants')
 
 module.exports = ({
   meta: {
     name: 'price-watch',
     description: 'Sends an embed message of the current statistics of SafeMoon',
-    interval: 300 * 1000,
-    defaultInterval: 300 * 1000,
+    interval: 60 * 1000,
+    defaultInterval: DEFAULT_PRICE_WATCH_INTERVAL * 1000,
     guildControlled: true,
     enabled: true
+  },
+  cache: {
+    cacheTime: 300 * 1000,
+    cacheExpiry: timeNow(),
+    priceEmbed: null,
   },
   run: async (client, cache) => {
     try {
       const guilds = await priceWatchSchema.find({})
-      const priceEmbed = await fetchPriceEmbed()
+      const jobName = 'price-watch';
+      // To avoid spamming the API, this command has a cache
+      // so that we just print the same result if we've already
+      // recently retrieved the latest price
+      if (
+        !cache.data || 
+        cache.cacheExpiry <= timeNow()
+      ) {
+        cache.priceEmbed = await fetchPriceEmbed()
+        cache.cacheExpiry = timeNow() + cache.cacheTime
+      }
+
+      const { priceEmbed } = cache;
 
       // Are we sharding?
       if (client.shard) {
         // Find guilds that are excluded from this job
-        const jobs = await jobSchema.find({ jobName: 'price-watch' })
+        const jobs = await jobSchema.find({ jobName })
         const excludedGuilds = getExcludedGuilds(jobs)
 
         // Find guilds associated to each shard
@@ -60,8 +78,17 @@ module.exports = ({
 
                 await channel.send(embed)
               })
+
             })()
           `)
+
+          await jobSchema.updateMany(
+            { 
+              'guildId': { $in : watchingGuilds },
+              'jobName': { $eq: jobName }
+            },
+            { $set: {'lastJobTime': getISODate() } }
+          )
         })
       }
       else {
@@ -84,6 +111,14 @@ module.exports = ({
 
           await channel.send(priceEmbed)
         })
+
+        await jobSchema.updateMany(
+          { 
+            'guildId': { $in : watchingGuilds },
+            'jobName': { $eq: jobName }
+          },
+          { $set: {'lastJobTime': getISODate() } }
+        )
       }
     }
     catch (e) {

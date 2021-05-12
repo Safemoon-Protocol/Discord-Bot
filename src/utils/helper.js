@@ -52,7 +52,24 @@ const getISODate = () => {
 }
 
 const didTimePassed = (beginDate, diff) => {
-  return new Date(beginDate) - new Date() >= diff
+  return new Date() - new Date(beginDate) >= diff * 1000
+}
+
+const getExcludedGuilds = (jobs) => {
+  const excGuilds = []
+  jobs.forEach((job) => {
+    if (!job.jobState) {
+      excGuilds.push(job.guildId);
+    }
+
+    if (
+      job.jobInterval && 
+      !didTimePassed(job.lastJobTime, job.jobInterval)
+      ) {
+      excGuilds.push(job.guildId);
+    }
+  })
+  return excGuilds;
 }
 
 module.exports = {
@@ -64,4 +81,5 @@ module.exports = {
   parseInterval,
   getISODate,
   didTimePassed,
+  getExcludedGuilds,
 }

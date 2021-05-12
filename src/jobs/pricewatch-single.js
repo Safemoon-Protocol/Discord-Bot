@@ -1,15 +1,15 @@
 const priceWatchSchema = require('../schemas/price-watch')
 const jobSchema = require('../schemas/jobs')
 const { getDexPrice } = require('../utils/external')
-const { timeNow } = require('../utils/helper')
-const { getExcludedGuilds } = require('./helper/helper')
+const { timeNow, getISODate, getExcludedGuilds } = require('../utils/helper')
+const { DEFAULT_PRICE_WATCH_SINGLE_INTERVAL } = require('../constants/constants')
 
 module.exports = ({
   meta: {
     name: 'price-watch-single',
     description: 'Sends a single message of the current price of SafeMoon',
     interval: 5 * 1000,
-    defaultInterval: 15 * 1000,
+    defaultInterval: DEFAULT_PRICE_WATCH_SINGLE_INTERVAL * 1000,
     guildControlled: true,
     enabled: true
   },
@@ -23,6 +23,7 @@ module.exports = ({
   run: async (client, cache) => {
     try {
       const guilds = await priceWatchSchema.find({})
+      const jobName = 'price-watch-single';
       
       // To avoid spamming the API, this command has a cache
       // so that we just print the same result if we've already
@@ -47,7 +48,7 @@ module.exports = ({
       // Are we sharding?
       if (client.shard) {
         // Find guilds that are excluded from this job
-        const jobs = await jobSchema.find({ jobName: 'price-watch-single' })
+        const jobs = await jobSchema.find({ jobName })
         const excludedGuilds = getExcludedGuilds(jobs)
 
         // Find guilds associated to each shard
@@ -92,8 +93,16 @@ module.exports = ({
 
                 await channel.send(message.replace('GreenSafu', GreenSafu).replace('RedSafu', RedSafu))
               })
+
             })()
           `)
+          await jobSchema.updateMany(
+            { 
+              'guildId': { $in : watchingGuilds },
+              'jobName': { $eq: jobName }
+            },
+            { $set: { 'lastJobTime': getISODate() } }
+          )
         })
       }
       else {
@@ -117,8 +126,17 @@ module.exports = ({
 
           const GreenSafu = client.emojis.cache.get('828471113754869770') || ':green_circle:'
           const RedSafu = client.emojis.cache.get('828471096734908467') || ':red_circle:'
+
           await channel.send(priceMessage.replace('GreenSafu', GreenSafu).replace('RedSafu', RedSafu))
         })
+
+        await jobSchema.updateMany(
+          { 
+            'guildId': { $in : watchingGuilds },
+            'jobName': { $eq: jobName }
+          },
+          { $set: { 'lastJobTime': getISODate() } }
+        )
       }
     }
     catch (e) {
