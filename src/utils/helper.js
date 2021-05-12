@@ -35,10 +35,9 @@ const validateText = (text, regex) => {
 }
 
 // parse interval and return miliseconds
-const parseInterval = (interval) => {
+const parseInterval = (splitted) => {
   interval = interval.replace(/\s|,/g, '')
   const splitted = interval.split(/[a-z]/)
-
   var d = Number(splitted[0])
   var h = Number(splitted[1])
   var m = Number(splitted[2])

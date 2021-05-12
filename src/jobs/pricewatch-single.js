@@ -1,7 +1,8 @@
 const priceWatchSchema = require('../schemas/price-watch')
 const jobSchema = require('../schemas/jobs')
 const { getDexPrice } = require('../utils/external')
-const { timeNow, getISODate, getExcludedGuilds } = require('../utils/helper')
+const { timeNow, getISODate } = require('../utils/helper')
+const { getExcludedGuilds } = require('../utils/jobs')
 const { DEFAULT_PRICE_WATCH_SINGLE_INTERVAL } = require('../constants/constants')
 
 module.exports = ({
