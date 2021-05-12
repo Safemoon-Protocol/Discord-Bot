@@ -32,13 +32,13 @@ module.exports = ({
     }
 
     // user provided interval
-    if(intervalText) {
+    if (intervalText) {
       if (!validateText(intervalText, INTERVAL_FORMAT)) {
         return await message.lineReply(`Specified format is incorrect. The correct format is ${secsToDHMS(0)}`);
       }
 
       interval = parseInterval(intervalText);
-      if(job.meta.defaultInterval >= interval) {
+      if (job.meta.defaultInterval >= interval) {
         return await message.lineReply(`The interval cannot be lesser or equal to ${secsToDHMS(Math.floor(job.meta.defaultInterval / 1000))}`);
       }
       interval = Math.floor(interval / 1000);
