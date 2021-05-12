@@ -63,8 +63,7 @@ module.exports = ({
         upsert: true
       })
     }
-    catch(e) {
-    }
+    catch{}
 
     await targetChannel.send(await fetchPriceEmbed(client))
     return await channel.send(`:white_check_mark: Successfully set ${targetChannel} as the SafeMoon Price Watch channel.`)

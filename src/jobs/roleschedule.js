@@ -19,7 +19,7 @@ module.exports = ({
       // Are we sharding?
       if (client.shard) {
         // Find guilds that are excluded from this job
-        const jobs= await jobSchema.find({ jobName: 'role-schedule' })
+        const jobs = await jobSchema.find({ jobName: 'role-schedule' })
         const excludedGuilds = JSON.stringify(getExcludedGuilds(jobs))
         
         await client.shard.broadcastEval(`
@@ -71,7 +71,7 @@ module.exports = ({
       }
       else {
         // Find guilds that are excluded from this job
-        const jobs= await jobSchema.find({ jobName: 'role-schedule' })
+        const jobs = await jobSchema.find({ jobName: 'role-schedule' })
         const excludedGuilds = JSON.stringify(getExcludedGuilds(jobs))
 
         const guildIds = client.guilds.cache.map((g) => g.id)
