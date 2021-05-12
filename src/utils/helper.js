@@ -27,28 +27,32 @@ const secsToDHMS = (seconds) => {
 // validate string against regex
 const validateText = (text, regex) => {
   if(!text) {
-    return false;
+    return false
   }
 
   const matched = text.match(regex);
-  return !!matched && matched.length > 0;
+  return !!matched && matched.length > 0
 }
 
 // parse interval and return miliseconds
 const parseInterval = (interval) => {
-  interval = interval.replace(/\s|,/g, '');
-  const splitted = interval.split(/[a-z]/);
+  interval = interval.replace(/\s|,/g, '')
+  const splitted = interval.split(/[a-z]/)
 
-  var d = Number(splitted[0]);
-  var h = Number(splitted[1]);
-  var m = Number(splitted[2]);
-  var s = Number(splitted[3]);
+  var d = Number(splitted[0])
+  var h = Number(splitted[1])
+  var m = Number(splitted[2])
+  var s = Number(splitted[3])
 
-  return ((d * 24 * 3600) + (h * 3600) + (m * 60) + s) * 1000;
+  return ((d * 24 * 3600) + (h * 3600) + (m * 60) + s) * 1000
 }
 
 const getISODate = () => {
-  return new Date().toISOString();
+  return new Date().toISOString()
+}
+
+const didTimePassed = (beginDate, diff) => {
+  return new Date(beginDate) - new Date() >= diff
 }
 
 module.exports = {
@@ -59,4 +63,5 @@ module.exports = {
   validateText,
   parseInterval,
   getISODate,
+  didTimePassed,
 }

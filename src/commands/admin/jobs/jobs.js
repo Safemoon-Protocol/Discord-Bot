@@ -16,7 +16,7 @@ module.exports = ({
         const status = (entry ? entry.jobState : job.meta.enabled) ? ':white_check_mark:' : ':x:'
 
         return {
-          "name": `${status} - \`${job.meta.name}\` | ${secsToDHMS(job.meta.interval / 1000)}`,
+          "name": `${status} - \`${job.meta.name}\` | ${secsToDHMS(job.meta.defaultInterval ? job.meta.defaultInterval / 1000 : job.meta.interval / 1000)}`,
           "value": `_${job.meta.description}_`,
           "inline": false
         }

@@ -1,12 +1,14 @@
 const priceWatchSchema = require('../schemas/price-watch')
 const jobSchema = require('../schemas/jobs')
 const { fetchPriceEmbed } = require('../utils/prices')
+const { getExcludedGuilds } = require('./helper/helper')
 
 module.exports = ({
   meta: {
     name: 'price-watch',
     description: 'Sends an embed message of the current statistics of SafeMoon',
     interval: 300 * 1000,
+    defaultInterval: 300 * 1000,
     guildControlled: true,
     enabled: true
   },
@@ -18,8 +20,8 @@ module.exports = ({
       // Are we sharding?
       if (client.shard) {
         // Find guilds that are excluded from this job
-        const jobsExcluded = await jobSchema.find({ jobState: false, jobName: 'price-watch' })
-        const excludedGuilds = jobsExcluded.map((exc) => exc.guildId)
+        const jobs = await jobSchema.find({ jobName: 'price-watch' })
+        const excludedGuilds = getExcludedGuilds(jobs)
 
         // Find guilds associated to each shard
         const shardedGuildIds = await client.shard.broadcastEval(`this.guilds.cache.map((g) => g.id)`)
@@ -64,8 +66,8 @@ module.exports = ({
       }
       else {
         // Find guilds that are excluded from this job
-        const jobsExcluded = await jobSchema.find({ jobState: false, jobName: 'price-watch' })
-        const excludedGuilds = jobsExcluded.map((exc) => exc.guildId)
+        const jobs = await jobSchema.find({ jobName: 'price-watch' })
+        const excludedGuilds = getExcludedGuilds(jobs)
 
         // Get all guilds
         const guildIds = client.guilds.cache.map((g) => g.id)

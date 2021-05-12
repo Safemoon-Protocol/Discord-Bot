@@ -31,14 +31,15 @@ module.exports = ({
       return await message.lineReply('Unable to enable a job that is not guild controlled.')
     }
 
+    // user provided interval
     if(intervalText) {
       if (!validateText(intervalText, INTERVAL_FORMAT)) {
         return await message.lineReply(`Specified format is incorrect. The correct format is ${secsToDHMS(0)}`);
       }
 
       interval = parseInterval(intervalText);
-      if(job.meta.interval >= interval) {
-        return await message.lineReply(`The interval cannot be lesser or equal to ${secsToDHMS(Math.floor(job.meta.interval / 1000))}`);
+      if(job.meta.defaultInterval >= interval) {
+        return await message.lineReply(`The interval cannot be lesser or equal to ${secsToDHMS(Math.floor(job.meta.defaultInterval / 1000))}`);
       }
       interval = Math.floor(interval / 1000);
       lastJob = getISODate();
