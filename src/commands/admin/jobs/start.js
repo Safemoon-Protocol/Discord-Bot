@@ -1,4 +1,4 @@
-const { processCmd, validateText, parseInterval, secsToDHMS, getISODate } = require('../../../utils/helper')
+const { processCmd, validateText, parseInterval, secsToDHMS, getISODate, validateTime } = require('../../../utils/helper')
 const jobSchema = require('../../../schemas/jobs')
 const { INTERVAL_FORMAT } = require('../../../constants/constants')
 
@@ -35,6 +35,11 @@ module.exports = ({
     if (intervalText) {
       if (!validateText(intervalText, INTERVAL_FORMAT)) {
         return await message.lineReply(`Specified format is incorrect. The correct format is ${secsToDHMS(0)}`)
+      }
+
+      const timeValidationMsg = validateTime(intervalText)
+      if (timeValidationMsg !== '') {
+        return await message.lineReply(timeValidationMsg)
       }
 
       interval = parseInterval(intervalText)

@@ -30,12 +30,34 @@ const validateText = (text, regex) => {
     return false
   }
 
-  const matched = text.match(regex);
+  const matched = text.match(regex)
   return !!matched && matched.length > 0
 }
 
+// validate if the time is provided correctly
+const validateTime = (interval) => {
+  interval = interval.replace(/\s|,/g, '')
+  const splitted = interval.split(/[a-z]/)
+  var d = Number(splitted[0])
+  var h = Number(splitted[1])
+  var m = Number(splitted[2])
+  var s = Number(splitted[3])
+
+  if (d > 7) {
+    return "The maximum day interval is 7."
+  } else if (h > 24) {
+    return "You cannot provide more than 24 hours."
+  } else if (m >= 60) {
+    return "You cannot provide more than 59 minutes."
+  } else if (s >= 60) {
+    return "You cannot provide more than 59 seconds."
+  }
+
+  return ''
+}
+
 // parse interval and return miliseconds
-const parseInterval = (splitted) => {
+const parseInterval = (interval) => {
   interval = interval.replace(/\s|,/g, '')
   const splitted = interval.split(/[a-z]/)
   var d = Number(splitted[0])
@@ -54,22 +76,6 @@ const didTimePassed = (beginDate, diff) => {
   return new Date() - new Date(beginDate) >= diff * 1000
 }
 
-const getExcludedGuilds = (jobs) => {
-  const excGuilds = []
-  jobs.forEach((job) => {
-    if (!job.jobState) {
-      excGuilds.push(job.guildId);
-    }
-
-    if (
-      job.jobInterval && 
-      !didTimePassed(job.lastJobTime, job.jobInterval)
-      ) {
-      excGuilds.push(job.guildId);
-    }
-  })
-  return excGuilds;
-}
 
 module.exports = {
   processCmd,
@@ -80,5 +86,5 @@ module.exports = {
   parseInterval,
   getISODate,
   didTimePassed,
-  getExcludedGuilds,
+  validateTime,
 }
