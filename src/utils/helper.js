@@ -43,6 +43,15 @@ const validateTime = (interval) => {
   var m = Number(splitted[2])
   var s = Number(splitted[3])
 
+  if (
+    d < 0 ||
+    h < 0 ||
+    m < 0 ||
+    s < 0
+  ) {
+    return "Every number must be positive integer."
+  }
+
   if (d > 7) {
     return "The maximum day interval is 7."
   } else if (h > 24) {

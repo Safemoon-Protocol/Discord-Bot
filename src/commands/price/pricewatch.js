@@ -35,7 +35,8 @@ module.exports = ({
         upsert: true
       })
 
-
+      const lastJob = getISODate();
+      
       // create jobs related to to this command
       await jobSchema.findOneAndUpdate({
         guildId: guild.id,
@@ -44,7 +45,7 @@ module.exports = ({
         guildId: guild.id,
         jobName: 'price-watch-single',
         jobInterval: DEFAULT_PRICE_WATCH_SINGLE_INTERVAL,
-        lastJobTime: getISODate(),
+        lastJobTime: lastJob,
         jobState: true,
       }, {
         upsert: true
@@ -57,7 +58,7 @@ module.exports = ({
         guildId: guild.id,
         jobName: 'price-watch',
         jobInterval: DEFAULT_PRICE_WATCH_INTERVAL,
-        lastJobTime: getISODate(),
+        lastJobTime: lastJob,
         jobState: true,
       }, {
         upsert: true
