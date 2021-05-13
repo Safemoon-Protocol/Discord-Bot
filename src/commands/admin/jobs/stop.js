@@ -1,5 +1,6 @@
 const { processCmd } = require('../../../utils/helper')
 const jobSchema = require('../../../schemas/jobs')
+const { getHighlightedText } = require('../../../utils/helper')
 
 module.exports = ({
   meta: {
@@ -44,7 +45,7 @@ module.exports = ({
       }, {
         upsert: true
       })
-      return await message.reply('Successfully disabled `' + jobName + '`, this job will no longer run on the jobs interval.')
+      return await message.reply(`Successfully disabled ${getHighlightedText(jobName)}, this job will no longer run on the jobs interval.`)
     }
     catch {}
   }

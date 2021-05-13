@@ -1,4 +1,4 @@
-const { processCmd, validateText, parseInterval, secsToDHMS, getISODate, validateTime } = require('../../../utils/helper')
+const { processCmd, validateText, parseInterval, secsToDHMS, getISODate, validateTime, getHighlightedText  } = require('../../../utils/helper')
 const jobSchema = require('../../../schemas/jobs')
 const { INTERVAL_FORMAT } = require('../../../constants/constants')
 
@@ -65,13 +65,13 @@ module.exports = ({
           }, {
             upsert: true
           })
-          return await message.reply('Successfully changed the interval for `' + jobName + '`, this will execute on the jobs next interval.')
+          return await message.reply(`Successfully changed the interval for ${getHighlightedText(jobName)}, this will execute on the jobs next interval.`)
         }
         catch {}
         
   
       } else {
-        return await message.lineReply(`Please provide time inteval in specified format: ${secsToDHMS(0)}.`)
+        return await message.lineReply(`Please provide time interval in specified format: ${secsToDHMS(0)}.`)
       }
     }
 })
