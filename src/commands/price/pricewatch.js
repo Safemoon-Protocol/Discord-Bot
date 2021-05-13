@@ -36,7 +36,7 @@ module.exports = ({
       })
 
       const lastJob = getISODate();
-      
+
       // create jobs related to to this command
       await jobSchema.findOneAndUpdate({
         guildId: guild.id,
@@ -64,7 +64,7 @@ module.exports = ({
         upsert: true
       })
     }
-    catch{}
+    catch {}
 
     await targetChannel.send(await fetchPriceEmbed(client))
     return await channel.send(`:white_check_mark: Successfully set ${targetChannel} as the SafeMoon Price Watch channel.`)

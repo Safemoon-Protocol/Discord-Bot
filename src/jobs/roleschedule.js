@@ -3,7 +3,6 @@ const jobSchema = require('../schemas/jobs')
 const { timeNow } = require('../utils/helper')
 const { getExcludedGuilds } = require('../utils/jobs')
 
-
 module.exports = ({
   meta: {
     name: 'role-schedule',

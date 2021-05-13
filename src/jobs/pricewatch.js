@@ -23,6 +23,7 @@ module.exports = ({
     try {
       const guilds = await priceWatchSchema.find({})
       const jobName = 'price-watch';
+
       // To avoid spamming the API, this command has a cache
       // so that we just print the same result if we've already
       // recently retrieved the latest price
@@ -79,19 +80,22 @@ module.exports = ({
 
                 await channel.send(embed)
               })
-
             })()
           `)
 
-          await jobSchema.updateMany(
-            { 
-              'guildId': { $in : watchingGuilds },
-              'jobName': { $eq: jobName }
-            },
-            { $set: {'lastJobTime': getISODate() } }
-          )
+          try {
+            await jobSchema.updateMany(
+              { 
+                'guildId': { $in : watchingGuilds },
+                'jobName': { $eq: jobName }
+              },
+              { $set: {'lastJobTime': getISODate() } }
+            )
+            
+          } catch {}
+          
         })
-      }
+        }
       else {
         // Find guilds that are excluded from this job
         const jobs = await jobSchema.find({ jobName: 'price-watch' })

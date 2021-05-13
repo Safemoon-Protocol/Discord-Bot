@@ -94,17 +94,20 @@ module.exports = ({
 
                 await channel.send(message.replace('GreenSafu', GreenSafu).replace('RedSafu', RedSafu))
               })
-
             })()
           `)
-          await jobSchema.updateMany(
-            { 
-              'guildId': { $in : watchingGuilds },
-              'jobName': { $eq: jobName }
-            },
-            { $set: { 'lastJobTime': getISODate() } }
-          )
+
+          try {
+            await jobSchema.updateMany(
+              { 
+                'guildId': { $in : watchingGuilds },
+                'jobName': { $eq: jobName }
+              },
+              { $set: { 'lastJobTime': getISODate() } }
+            )
+          } catch {}
         })
+
       }
       else {
         // Find guilds that are excluded from this job

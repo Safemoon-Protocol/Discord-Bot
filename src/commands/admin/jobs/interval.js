@@ -50,7 +50,7 @@ module.exports = ({
         lastJob = getISODate()
 
         try {
-          // Check if the job is already enabled
+          // Check if the job was not enabled for this guild
           const existingJob = await jobSchema.findOne({ guildId: guild.id, jobName: job.meta.name, jobState: true })
           if (!existingJob) {
             return await message.lineReply(`The specified job (${job.meta.name}) is not enabled for this guild.`)
