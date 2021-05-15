@@ -22,7 +22,7 @@ module.exports = ({
   run: async (client, cache) => {
     try {
       const guilds = await priceWatchSchema.find({})
-      const jobName = 'price-watch';
+      const jobName = 'price-watch'
 
       // To avoid spamming the API, this command has a cache
       // so that we just print the same result if we've already
@@ -35,7 +35,7 @@ module.exports = ({
         cache.cacheExpiry = timeNow() + cache.cacheTime
       }
 
-      const { priceEmbed } = cache;
+      const { priceEmbed } = cache
 
       // Are we sharding?
       if (client.shard) {

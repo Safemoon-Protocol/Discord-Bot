@@ -35,7 +35,7 @@ module.exports = ({
         upsert: true
       })
 
-      const lastJob = getISODate();
+      const lastJob = getISODate()
 
       // create jobs related to to this command
       await jobSchema.findOneAndUpdate({

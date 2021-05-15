@@ -1,4 +1,4 @@
-const { processCmd, validateText, parseInterval, secsToDHMS, getISODate, validateTime, getHighlightedText  } = require('../../../utils/helper')
+const { processCmd, validateText, parseInterval, secsToDHMS, getISODate, validateTime, getInlineCodeblock  } = require('../../../utils/helper')
 const jobSchema = require('../../../schemas/jobs')
 const { INTERVAL_FORMAT } = require('../../../constants/constants')
 
@@ -14,8 +14,8 @@ module.exports = ({
     const { guild } = message
     const jobName = args.shift() || null
     const intervalText = args.join(" ")
-    var interval = null
-    var lastJob = null
+    let interval = null
+    let lastJob = null
 
 
     if (!jobName) {
@@ -74,7 +74,7 @@ module.exports = ({
       }, {
         upsert: true
       })
-      return await message.reply(`Successfully enabled ${getHighlightedText(jobName)}, this will execute on the jobs next interval.`)
+      return await message.reply(`Successfully enabled ${getInlineCodeblock(jobName)}, this will execute on the jobs next interval.`)
     }
     catch {}
   }

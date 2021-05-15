@@ -1,4 +1,4 @@
-const { processCmd, secsToDHMS, getHighlightedText } = require('../../../utils/helper')
+const { processCmd, secsToDHMS, getInlineCodeblock } = require('../../../utils/helper')
 const jobSchema = require('../../../schemas/jobs')
 
 module.exports = ({
@@ -23,7 +23,7 @@ module.exports = ({
 
       const job = client.jobs.get(jobName)
       if (!job.meta.guildControlled) {
-        return await message.lineReply('Unable to enable a job that is not guild controlled.')
+        return await message.lineReply('Guild controlled jobs run on an interval that cannot be changed')
       }
   
       try {
@@ -33,7 +33,7 @@ module.exports = ({
           return await message.lineReply(`The specified job (${job.meta.name}) is not enabled for this guild.`)
         }
   
-        return await message.reply(`The current interval for ${getHighlightedText(jobName)} is ${secsToDHMS(existingJob.jobInterval)}.`)
+        return await message.reply(`The current interval for ${getInlineCodeblock(jobName)} is ${secsToDHMS(existingJob.jobInterval)}.`)
       }
       catch {}
     }

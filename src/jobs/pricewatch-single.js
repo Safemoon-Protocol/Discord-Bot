@@ -24,7 +24,7 @@ module.exports = ({
   run: async (client, cache) => {
     try {
       const guilds = await priceWatchSchema.find({})
-      const jobName = 'price-watch-single';
+      const jobName = 'price-watch-single'
       
       // To avoid spamming the API, this command has a cache
       // so that we just print the same result if we've already

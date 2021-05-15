@@ -85,10 +85,9 @@ const didTimePassed = (beginDate, diff) => {
   return new Date() - new Date(beginDate) >= diff * 1000
 }
 
-const getHighlightedText = (text) => {
+const getInlineCodeblock = (text) => {
   return '`' + text + '`'
 }
-
 
 module.exports = {
   processCmd,
@@ -100,5 +99,5 @@ module.exports = {
   getISODate,
   didTimePassed,
   validateTime,
-  getHighlightedText
+  getInlineCodeblock
 }
