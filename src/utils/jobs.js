@@ -14,7 +14,7 @@ const getExcludedGuilds = (jobs) => {
       excGuilds.push(job.guildId)
     }
   })
-  return excGuilds;
+  return excGuilds
 }
 
 module.exports = {
