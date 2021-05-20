@@ -1,7 +1,6 @@
-const mongo = require('../mongo')
-const setupSchema = require('../schemas/setup-schema')
-const { resetCooldown } = require('../utils/cooldown')
-const { fetchPriceEmbed } = require('../utils/prices')
+const priceWatchSchema = require('../../schemas/price-watch')
+const { resetCooldown } = require('../../utils/cooldown')
+const { fetchPriceEmbed } = require('../../utils/prices')
 
 module.exports = ({
   meta: {
@@ -22,21 +21,18 @@ module.exports = ({
     }
 
     // Add the channel to the database
-    await mongo().then(async mongoose => {
-      try {
-        await setupSchema.findOneAndUpdate({
-          _id: guild.id
-        }, {
-          _id: guild.id,
-          channelId: targetChannel.id,
-          text: '', // TODO: Remove this column as it is not needed
-        }, {
-          upsert: true
-        })
-      } finally {
-        mongoose.connection.close()
-      }
-    })
+    try {
+      await priceWatchSchema.findOneAndUpdate({
+        _id: guild.id
+      }, {
+        _id: guild.id,
+        channelId: targetChannel.id,
+        text: '', // TODO: Remove this column as it is not needed
+      }, {
+        upsert: true
+      })
+    }
+    catch {}
 
     await targetChannel.send(await fetchPriceEmbed(client))
     return await channel.send(`:white_check_mark: Successfully set ${targetChannel} as the SafeMoon Price Watch channel.`)

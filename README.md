@@ -136,6 +136,7 @@ If you're using Docker & Docker Compose, you can use the following command
 to start the bot and its services.
 
 ```bash
+$ docker network create safemoon
 $ docker-compose up -d
 
 # To view the logs of the bot, you can use this command

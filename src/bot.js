@@ -1,9 +1,12 @@
 const { Client, Intents } = require('discord.js')
 const { updatePresence } = require('./utils/presence')
-const loadCommands = require('./commands')
-const loadJobs = require('./jobs')
+const getDb = require('./managers/database')
+const loadCogs = require('./managers/cogs')
+const loadCommands = require('./managers/commands')
+const loadJobs = require('./managers/jobs')
 const config = require('./config.json')
 const { passedCooldown, setCommandCooldown } = require('./utils/cooldown')
+/* inlineReply */ require('discord-reply')
 
 // Create our bot client
 const client = new Client({
@@ -18,10 +21,14 @@ const client = new Client({
 client.on('ready', async () => {
   console.log(client.user.tag + ' has logged in.')
 
+  // Initialise database
+  client.db = await getDb()
+
   // Update Presence (and start interval)
   await updatePresence(client)
   
-  // Load commands & jobs
+  // Load cogs, commands & jobs
+  await loadCogs(client)
   await loadCommands(client)
   await loadJobs(client)
 });
@@ -63,6 +70,7 @@ client.on('message', async (message) => {
 
     // Don't run the command if we're in a cooldown for this channel
     if (!passedCooldown(run, message)) {
+      message.react('⏱️')
       return console.warn('Not running', run.meta.name, 'due to cooldown')
     }
 

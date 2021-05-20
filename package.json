@@ -16,9 +16,12 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.21.1",
+    "canvas": "^2.7.0",
+    "discord-reply": "^0.1.2",
     "discord.js": "^12.5.3",
     "dotenv": "^8.2.0",
-    "mongoose": "^5.12.5"
+    "mongoose": "^5.12.5",
+    "string-pixel-width": "^1.10.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"

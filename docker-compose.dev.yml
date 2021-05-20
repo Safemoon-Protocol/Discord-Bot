@@ -1,0 +1,27 @@
+version: "3.7"
+
+# Configurable Settings
+x-safemoon-settings:
+  &safemoon-settings
+    networks:
+      # External network
+      - safemoon
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGODB_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGODB_PASSWORD}
+    env_file:
+      - .env.dev
+    restart: on-failure
+
+# No need to edit anything below this line
+services:
+  mongo-web:
+    image: mongo-express:latest
+    container_name: safemoon-db-ui
+    ports:
+      - 8081:8081
+    << : *safemoon-settings
+
+networks:
+  safemoon:
+    external: true

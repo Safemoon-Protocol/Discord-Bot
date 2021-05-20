@@ -1,5 +1,5 @@
-const { getDexPrice } = require('../utils/external')
-const { timeNow } = require('../utils/helper')
+const { getDexPrice } = require('../../utils/external')
+const { timeNow } = require('../../utils/helper')
 
 module.exports = ({
   meta: {
