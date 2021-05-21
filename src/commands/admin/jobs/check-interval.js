@@ -23,7 +23,7 @@ module.exports = ({
 
       const job = client.jobs.get(jobName)
       if (!job.meta.guildControlled) {
-        return await message.lineReply('Guild controlled jobs run on an interval that cannot be changed.')
+        return await message.lineReply('This job is not guild controlled so the interval cannot be changed.')
       }
   
       try {

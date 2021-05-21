@@ -40,7 +40,6 @@ module.exports = ({
         guildId: guild.id,
         jobName: job.meta.name,
         jobState: false,
-        jobInterval: null,
         lastJobTime: null,
       }, {
         upsert: true

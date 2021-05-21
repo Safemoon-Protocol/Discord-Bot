@@ -91,11 +91,9 @@ module.exports = ({
               },
               { $set: {'lastJobTime': getISODate() } }
             )
-            
           } catch {}
-          
         })
-        }
+      }
       else {
         // Find guilds that are excluded from this job
         const jobs = await jobSchema.find({ jobName: 'price-watch' })
