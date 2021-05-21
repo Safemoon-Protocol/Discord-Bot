@@ -82,7 +82,6 @@ module.exports = ({
               })
             })()
           `)
-
           try {
             await jobSchema.updateMany(
               { 

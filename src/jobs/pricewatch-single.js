@@ -77,7 +77,6 @@ module.exports = ({
               })
 
               watchingGuilds.forEach(async (guildId) => {
-
                 const guildRow = guilds.find((g) => g._id === guildId)
                 if (!guildRow) return
 
@@ -95,7 +94,6 @@ module.exports = ({
               })
             })()
           `)
-
           try {
             await jobSchema.updateMany(
               { 
@@ -116,7 +114,6 @@ module.exports = ({
         const guildIds = client.guilds.cache.map((g) => g.id)
         const watchingGuilds = guildIds.filter((dbId) => !excludedGuilds.includes(dbId))
         watchingGuilds.forEach(async (guildId) => {
-
           const guildRow = guilds.find((g) => g._id === guildId)
           if (!guildRow) return
 
@@ -131,7 +128,6 @@ module.exports = ({
 
           await channel.send(priceMessage.replace('GreenSafu', GreenSafu).replace('RedSafu', RedSafu))
         })
-
         await jobSchema.updateMany(
           { 
             'guildId': { $in : watchingGuilds },
