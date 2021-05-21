@@ -1,6 +1,6 @@
 const { didTimePassed } = require("./helper")
 
-const getExcludedGuilds = (jobs) => {
+const getExcludedGuildsIds = (jobs) => {
   const excGuilds = []
   jobs.forEach((job) => {
     if (!job.jobState || (job.jobInterval && !didTimePassed(job.lastJobTime, job.jobInterval))) {
@@ -11,5 +11,5 @@ const getExcludedGuilds = (jobs) => {
 }
 
 module.exports = {
-  getExcludedGuilds,
+  getExcludedGuildsIds,
 }
