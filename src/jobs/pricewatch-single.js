@@ -59,7 +59,6 @@ module.exports = ({
           const watchingGuilds = guildIds.filter((dbId) => !excludedGuilds.includes(dbId))
           const guildsByCsv = watchingGuilds.join(',')
           const dbGuildsAndChannels = guilds.map((g) => `${g.id}/${g.channelId}`).join(',')
-          
 
           await client.shard.broadcastEval(`
             (async () => {
@@ -107,7 +106,6 @@ module.exports = ({
             )
           } catch {}
         })
-
       }
       else {
         // Find guilds that are excluded from this job

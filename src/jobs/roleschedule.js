@@ -20,7 +20,7 @@ module.exports = ({
         // Find guilds that are excluded from this job
         const jobs = await jobSchema.find({ jobName: 'role-schedule' })
         const excludedGuilds = JSON.stringify(getExcludedGuildsIds(jobs))
-      
+
         await client.shard.broadcastEval(`
           (async () => {
             const excludedGuilds = JSON.parse(\`${excludedGuilds}\`)

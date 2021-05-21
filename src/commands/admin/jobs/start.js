@@ -17,7 +17,6 @@ module.exports = ({
     let interval = null
     let lastJob = null
 
-
     if (!jobName) {
       return await message.lineReply('Please specify a Job name: \n```\n' + Array.from(client.jobs.keys()).join('\n') + '\n```')
     }
