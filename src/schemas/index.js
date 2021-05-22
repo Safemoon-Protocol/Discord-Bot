@@ -13,8 +13,18 @@ const requiredBool = {
   required: true
 }
 
+const nonRequiredNumber = {
+  type: Number,
+}
+
+const nonRequiredString = {
+  type: String,
+}
+
 module.exports = {
   requiredString,
   requiredNumber,
   requiredBool,
+  nonRequiredNumber,
+  nonRequiredString,
 }

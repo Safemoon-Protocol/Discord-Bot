@@ -1,5 +1,6 @@
 const { processCmd } = require('../../../utils/helper')
 const jobSchema = require('../../../schemas/jobs')
+const { getInlineCodeblock } = require('../../../utils/helper')
 
 module.exports = ({
   meta: {
@@ -38,11 +39,12 @@ module.exports = ({
       }, {
         guildId: guild.id,
         jobName: job.meta.name,
-        jobState: false
+        jobState: false,
+        lastJobTime: null,
       }, {
         upsert: true
       })
-      return await message.reply('Successfully disabled `' + jobName + '`, this job will no longer run on the jobs interval.')
+      return await message.reply(`Successfully disabled ${getInlineCodeblock(jobName)}, this job will no longer run on the jobs interval.`)
     }
     catch {}
   }

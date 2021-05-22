@@ -14,9 +14,10 @@ module.exports = ({
       const jobFields = client.jobs.map((job) => {
         const entry = jobStatus.find((s) => s.jobName == job.meta.name)
         const status = (entry ? entry.jobState : job.meta.enabled) ? ':white_check_mark:' : ':x:'
+        const interval = (entry ? (entry.jobInterval ? entry.jobInterval : job.meta.defaultInterval / 1000) : job.meta.defaultInterval /1000)
 
         return {
-          "name": `${status} - \`${job.meta.name}\` | ${secsToDHMS(job.meta.interval / 1000)}`,
+          "name": `${status} - \`${job.meta.name}\` | ${secsToDHMS(interval ? interval : job.meta.interval / 1000)}`,
           "value": `_${job.meta.description}_`,
           "inline": false
         }

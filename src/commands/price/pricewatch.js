@@ -1,5 +1,8 @@
+const { DEFAULT_PRICE_WATCH_SINGLE_INTERVAL, DEFAULT_PRICE_WATCH_INTERVAL } = require('../../constants/constants')
 const priceWatchSchema = require('../../schemas/price-watch')
+const jobSchema = require('../../schemas/jobs')
 const { resetCooldown } = require('../../utils/cooldown')
+const { getISODate } = require('../../utils/helper')
 const { fetchPriceEmbed } = require('../../utils/prices')
 
 module.exports = ({
@@ -28,6 +31,35 @@ module.exports = ({
         _id: guild.id,
         channelId: targetChannel.id,
         text: '', // TODO: Remove this column as it is not needed
+      }, {
+        upsert: true
+      })
+
+      const lastJob = getISODate()
+
+      // create jobs related to to this command
+      await jobSchema.findOneAndUpdate({
+        guildId: guild.id,
+        jobName: 'price-watch-single'
+      }, {
+        guildId: guild.id,
+        jobName: 'price-watch-single',
+        jobInterval: DEFAULT_PRICE_WATCH_SINGLE_INTERVAL,
+        lastJobTime: lastJob,
+        jobState: true,
+      }, {
+        upsert: true
+      })
+
+      await jobSchema.findOneAndUpdate({
+        guildId: guild.id,
+        jobName: 'price-watch'
+      }, {
+        guildId: guild.id,
+        jobName: 'price-watch',
+        jobInterval: DEFAULT_PRICE_WATCH_INTERVAL,
+        lastJobTime: lastJob,
+        jobState: true,
       }, {
         upsert: true
       })
